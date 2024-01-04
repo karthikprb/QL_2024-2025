@@ -58,8 +58,8 @@ public class Slides {
         controller = new PIDFController(new PIDCoefficients(kp, ki, kd));
         reset();
 
-        digitalTouch = map.get(DigitalChannel.class, "sensor_digital");
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+        //digitalTouch = map.get(DigitalChannel.class, "sensor_digital");
+        //digitalTouch.setMode(DigitalChannel.Mode.INPUT);
 
         time = new ElapsedTime();
         secondTime =new ElapsedTime();
@@ -73,9 +73,9 @@ public class Slides {
         lSlide.write();
     }
 
-    public boolean isDown(){
-        return !digitalTouch.getState();
-    }
+    //public boolean isDown(){
+        //return !digitalTouch.getState();
+    //}
 
     public void setPosition(double target){
         controller.setTargetPosition(target);
@@ -177,10 +177,10 @@ public class Slides {
 
                     sum+=gamepad2.gamepad.left_stick_y*secondTime.time();
 
-                }else if(!isDown()&& gamepad1.gamepad.left_stick_y<0){
+                }else if(gamepad1.gamepad.left_stick_y<0){
                     setPower(gamepad2.gamepad.left_stick_y*0.4);
                     sum+=gamepad2.gamepad.left_stick_y*0.4*secondTime.time();
-                }else if(isDown()&& gamepad1.gamepad.left_stick_y<0){
+                }else if(gamepad1.gamepad.left_stick_y<0){
                     setPower(0);
                 }else{
                 setPower(0);

@@ -139,7 +139,7 @@ public class Mecanum_Drive{
     }
 
     public void setPower(Vector2 vec, double rot){
-        setPower(vec.x, vec.y, rot);
+        setPower(-vec.x, -vec.y, -rot);
     }
 
     public void setPowerCentic(double x, double y, double rot, double heading){

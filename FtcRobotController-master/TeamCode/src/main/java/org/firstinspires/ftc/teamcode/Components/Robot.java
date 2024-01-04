@@ -30,13 +30,15 @@ public class Robot {
     public V4B_Arm v4b;
 
     public Slides slides;
-    /*
-    public S4T_Localizer localizer;
+
+    public S4T_Localizer_3 localizer;
     private S4T_Encoder encoderLY;
-    private S4T_Encoder encoderLX;
+    //private S4T_Encoder encoderLX;
     private S4T_Encoder encoderRY;
     private S4T_Encoder encoderRX;
-        */
+
+    private Pose2d OFFSET = new Pose2d(0,0,0);
+
 
 
     OpenCvCamera webcam;
@@ -48,26 +50,28 @@ public class Robot {
     private Telemetry telemetry;
 
 
-    //public static Pose2d startPos = new Pose2d(0, 0, 0);
+    public static Pose2d startPos = new Pose2d(0, 0, 0);
 
     List<LynxModule> allHubs;
 
     public Robot(HardwareMap map, Telemetry telemetry){
         this.hardwareMap = map;
         this.telemetry = telemetry;
-        //startPos = new Pose2d(0, 0, 0);
+        startPos = new Pose2d(0, 0, 0);
 
 
         allHubs = hardwareMap.getAll(LynxModule.class);
         for (LynxModule module : allHubs) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
-        /*
+
         encoderLY = new S4T_Encoder(map, "bleft");
-        encoderLX = new S4T_Encoder(map, "fleft");
+        //encoderLX = new S4T_Encoder(map, "fleft");
         encoderRY = new S4T_Encoder(map, "bright");
         encoderRX = new S4T_Encoder(map, "fright");
-        */
+
+        localizer = new S4T_Localizer_3(telemetry);
+
         slides = new Slides(map,telemetry);
         intake = new Intake(map,telemetry);
         drive = new Mecanum_Drive(map, telemetry);
@@ -137,47 +141,52 @@ public class Robot {
 
     public void updatePos(){
         //encoderLX.update();
-        //encoderLY.update();
-        //encoderRX.update();
-        //encoderRY.update();
-        //localizer.update(getRawLeft_X_Dist(), getRawLeft_Y_Dist(), getRawRight_X_Dist(), getRawRight_Y_Dist());
-    }
-    /*
-    public double getRawLeft_X_Dist(){
-        encoderLX.update();
-        return encoderLX.distance;
+        encoderLY.update();
+        encoderRX.update();
+        encoderRY.update();
+        localizer.update(getRawLeft_Y_Dist(), getRawRight_X_Dist(), getRawRight_Y_Dist());
     }
 
     public double getRawRight_X_Dist(){
-        encoderRX.update();
         return encoderRX.distance;
     }
 
     public double getRawLeft_Y_Dist(){
-        encoderLY.update();
         return encoderLY.distance;
     }
 
     public double getRawRight_Y_Dist(){
-        encoderRY.update();
         return encoderRY.distance;
     }
 
+    public void resetOdo(){
+        encoderLY.reset();
+        encoderRY.reset();
+        encoderRX.reset();
+    }
     public void stopAndResetEncoders(){
-        //encoderLY.stopandreset();
-        //encoderRY.stopandreset();
-        //encoderRX.stopandreset();
-        encoderLX.stopandreset();
+        encoderLY.stopandreset();
+        encoderRY.stopandreset();
+        encoderRX.stopandreset();
 
-        //localizer.reset();
+        localizer.reset();
+    }
+
+    public void setStartPose(Pose2d startPos){
+        this.startPos = startPos;
+        localizer.setHeading(startPos.getHeading());
     }
 
     public Pose2d getPos(){
-        return new Pose2d(localizer.getPose().getX() + startPos.getX(), localizer.getPose().getY() + startPos.getY(), localizer.getPose().getHeading());
+        return new Pose2d((localizer.getPose().getX() + startPos.getX() - OFFSET.getX()), (localizer.getPose().getY() + startPos.getY() - OFFSET.getY()), localizer.getPose().getHeading());
     }
 
     public Pose2d getStartPos(){
         return startPos;
+    }
+
+    public void setOffset(Pose2d offset){
+        this.OFFSET = offset;
     }
 
     public void GoTo(Pose2d pose, Pose2d speedLimits){
@@ -207,14 +216,10 @@ public class Robot {
         for (LynxModule module : allHubs) {
             module.clearBulkCache();
         }
-        //encoderLY.update();
-        //encoderRY.update();
-        encoderLX.update();
-        //encoderRX.update();
     }
 
 
-     */
+
 
 
 
