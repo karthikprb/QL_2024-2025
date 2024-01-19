@@ -34,13 +34,13 @@ public class V4B_Tester extends LinearOpMode {
         servo = new Caching_Servo(hardwareMap, name);
         servo2 = new Caching_Servo(hardwareMap, name2);
 
-        servo.setZeros(.075, 1);
-        servo2.setZeros(.08, 1);
+        servo.setZeros(.01, 1);
+        servo2.setZeros(.04, .94);
 
         waitForStart();
         while (opModeIsActive()) {
-            manualSetPosition(V4btest.pos);
 
+            manualSetPosition(V4btest.pos);
             write();
             telemetry.addData("Position", servo.getPosition());
             telemetry.addData("position 2",servo2.getPosition());
@@ -54,5 +54,6 @@ public class V4B_Tester extends LinearOpMode {
 @Config
 class V4btest{
     //Set the set/start position of the servo in dashboard
-    public static double pos = 0;
+    public static double pos = 0.01;
+    public static double pos2 = 1;
 }

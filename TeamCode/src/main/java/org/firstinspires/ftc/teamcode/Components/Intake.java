@@ -13,8 +13,9 @@ import org.firstinspires.ftc.teamcode.Wrapper.Caching_Servo;
 import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 
 public class Intake {
-    Caching_Motor intake;
+    public Caching_Motor intake;
     public Caching_Servo intake_dropper;
+    public Caching_Servo intake_key;
     /*
     1. 0.33
     2. 0.27
@@ -23,8 +24,10 @@ public class Intake {
     5. 0.09
 
      */
-
-    private double pos =0;
+    public double unlockPos = 0;
+    public double lockPos = 0.29;
+    private double pos = .0;
+    private double posi = 0;
     ElapsedTime time;
     Telemetry telemetry;
 
@@ -34,6 +37,7 @@ public class Intake {
     public Intake(HardwareMap map, Telemetry telemetry){
         intake = new Caching_Motor(map, "intake");
         intake_dropper = new Caching_Servo(map, "intake_dropper");
+        intake_key = new Caching_Servo(map,"intake_key");
         this.telemetry = telemetry;
 
         intake.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -53,6 +57,20 @@ public class Intake {
         intake_dropper.setPosition(0.68);
     }
 
+    public void unlock(){
+        intake_key.setPosition(unlockPos);
+    }
+
+    public void lock(){
+        intake_key.setPosition(lockPos);
+    }
+
+    public void outtake(){
+        intake.setPower(-1);
+    }
+    public void outtakeDeposit(){
+        intake.setPower(-.15);
+    }
     public void intake(GamepadEx gamepadEx, GamepadEx gamepad2Ex, Telemetry telemetry){
         if(gamepadEx.isPress(GamepadEx.Control.right_bumper)){
             intakeToggle = !intakeToggle;
@@ -60,6 +78,9 @@ public class Intake {
 
         if(gamepadEx.isPress(GamepadEx.Control.right_trigger)){
             intakeToggle = false;
+        }
+        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
+            unlock();
         }
 
         if(gamepad2Ex.isPress(GamepadEx.Control.dpad_up)){
@@ -69,13 +90,16 @@ public class Intake {
             pos-=.01;
         }
 
-        intake_dropper.setPosition(0.18+pos);
+        intake_dropper.setPosition(0.59+pos);
 
         if(intakeToggle){
-            intake.setPower(1);
+            intake.setPower(-1);
         }if(!intakeToggle) {
-            intake.setPower(-gamepadEx.gamepad.right_trigger);
+            intake.setPower(gamepadEx.gamepad.right_trigger);
         }
+
+
+
 
         telemetry.addData("intake_dropper",intake_dropper.getPosition());
 
@@ -87,5 +111,6 @@ public class Intake {
     public void write(){
         intake.write();
         intake_dropper.write();
+        intake_key.write();
     }
 }

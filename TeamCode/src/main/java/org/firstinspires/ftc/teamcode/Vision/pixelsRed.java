@@ -1,34 +1,23 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
-import static org.firstinspires.ftc.teamcode.Vision.SleeveDetectorV2Constants.BOUNDING_BOX;
-import static org.firstinspires.ftc.teamcode.Vision.VisionConstants.horizon;
-import static org.opencv.imgproc.Imgproc.CV_SHAPE_ELLIPSE;
-
-import android.graphics.Bitmap;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
-import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
-import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 
-public class pixels extends OpenCvPipeline {
+public class pixelsRed extends OpenCvPipeline {
     Mat HSVMat = new Mat();
     Mat contoursOnFrameMat = new Mat();
     List<MatOfPoint> contoursList = new ArrayList<>();
@@ -38,7 +27,7 @@ public class pixels extends OpenCvPipeline {
 
     public int pixelCase = 0;
     public double blurConstant = 1;
-    public double dilationConstant = 4;
+    public double dilationConstant = 2;
 
     ArrayList<MatOfPoint> contThree = new ArrayList<>();
 
@@ -51,7 +40,7 @@ public class pixels extends OpenCvPipeline {
 
 
 
-    public int getPixelPosition(){
+    public int getPixelPositionRed(){
         return pixelCase;
     }
 
@@ -60,8 +49,8 @@ public class pixels extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
 
         //Config Scalars
-        Scalar lowerBlue = new Scalar(pixelss.lowerBlueH,pixelss.lowerBlueS,pixelss.lowerBlueV);
-        Scalar upperBlue = new Scalar(pixelss.upperBlueH,pixelss.upperBlueS,pixelss.upperBlueV);
+        Scalar lowerBlue = new Scalar(pixelssRed.lowerRedH,pixelssRed.lowerRedS,pixelssRed.lowerRedV);
+        Scalar upperBlue = new Scalar(pixelssRed.upperRedH,pixelssRed.upperRedS,pixelssRed.upperRedV);
 
         //List clears
         contoursList.clear();
@@ -74,9 +63,7 @@ public class pixels extends OpenCvPipeline {
 
         //kernels
         Size kernelSize2 =  new  Size(2 * dilationConstant + 1, 2 * dilationConstant + 1);
-        Size kernelSize3 = new Size(dilationConstant*2/3+1,dilationConstant*2/3+1);
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, kernelSize2);
-        Mat kernel2 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernelSize3);
         Size kernelSize = new Size(blurConstant, blurConstant);
 
         //Dilation
@@ -84,7 +71,7 @@ public class pixels extends OpenCvPipeline {
 
         //Erosion
 
-        Imgproc.erode(HSVMat,HSVMat,kernel2);
+        //Imgproc.erode(HSVMat,HSVMat,kernel);
 
         //Blurs the image
         Imgproc.GaussianBlur(HSVMat, HSVMat, kernelSize, 0);
@@ -110,13 +97,13 @@ public class pixels extends OpenCvPipeline {
             double area = moments.m00;
 
             Point center = calculateCentroid(moments);
-            if(area>= pixelss.threshold && center.y>=pixelss.horizon){
+            if(area>= pixelssRed.threshold && center.y>=pixelssRed.horizon){
                 contThree.add(contour);
             }
         }
 
         //sort by X val
-        contThree.sort(new sortArr());
+        contThree.sort(new sortArrRed());
 
 
 
@@ -156,12 +143,12 @@ public class pixels extends OpenCvPipeline {
 }
 
 //Comparator
-class sortArr implements Comparator<MatOfPoint> {
+class sortArrRed implements Comparator<MatOfPoint> {
     public int compare(MatOfPoint a, MatOfPoint b)
     {
         Moments aMom = Imgproc.moments(a);
         Moments bMom = Imgproc.moments(b);
-        if(pixels.calculateCentroid(aMom).x > pixels.calculateCentroid(bMom).x){
+        if(pixelsRed.calculateCentroid(aMom).x > pixelsRed.calculateCentroid(bMom).x){
             return 1;
         }else{
             return -1;
@@ -171,16 +158,16 @@ class sortArr implements Comparator<MatOfPoint> {
 
 //dash values
 @Config
-class pixelss{
-    public static int lowerBlueH = 0;
-    public static int lowerBlueS = 140;
-    public static int lowerBlueV = 20;
-    public static int upperBlueH = 130;
-    public static int upperBlueS = 255;
-    public static int upperBlueV =255;
+class pixelssRed{
+    public static int lowerRedH = 0;
+    public static int lowerRedS = 140;
+    public static int lowerRedV = 20;
+    public static int upperRedH = 130;
+    public static int upperRedS = 255;
+    public static int upperRedV =255;
 
     public static int threshold = 100;
 
-    public static int horizon = 100;
+    public static int horizon = 150;
 
 }

@@ -24,6 +24,7 @@ public class V4B_Arm {
     ElapsedTime secondTime = new ElapsedTime();
     public double grabberToggle = 0;
     boolean duoToggle = true;
+    boolean topToggle = false;
     Telemetry telemetry;
 
     public V4B_Arm(HardwareMap map, Telemetry telemetry){
@@ -34,8 +35,8 @@ public class V4B_Arm {
 
         this.telemetry = telemetry;
 
-        rightArm.setZeros(.075, 1);
-        leftArm.setZeros(.08, 1);
+        rightArm.setZeros(.01, 1);
+        leftArm.setZeros(.04, .94);
         //ZEROES 12/26
         //RIGHT: .075  IN     //  1  OUT
         //LEFT: 1 IN    // .08  OUT
@@ -52,8 +53,8 @@ public class V4B_Arm {
     }
 
     public void armPos(double val){
-        leftArm.setPosition(1-val);
-        rightArm.setPosition(val);
+        rightArm.setPosition(1-val);
+        leftArm.setPosition(val);
     }
 
     public void grab() {
@@ -65,17 +66,28 @@ public class V4B_Arm {
         rightGrab.setPosition(.5);
     }
     public void open(){
-        leftGrab.setPosition(.54);
+        leftGrab.setPosition(.55);
         rightGrab.setPosition(.48);
     }
     public void armIn() {
-        armPos(0.01);
+        armPos(0.12);
     }
-    public void armOut() { armPos(.8); }
+    public void armOut() { armPos(0.89); }
 
     public void operate(GamepadEx gamepad, GamepadEx gamepad2, Telemetry telemetry) {
+        /*(public void armIn(){
+            0.12+pos;
+        }
+        public void armOut(){
+            0.89+pos;
+        }
+        */
+
         if(gamepad2.isPress(GamepadEx.Control.x)){
             duoToggle = !duoToggle;
+        }
+        if(gamepad2.isPress(GamepadEx.Control.b)){
+            topToggle = !topToggle;
         }
         if(gamepad.isPress(GamepadEx.Control.left_bumper)){
             grabberToggle += 1;
@@ -141,11 +153,21 @@ public class V4B_Arm {
             }
             if(grabberToggle == 3){
                 armOut();
-                rightGrab.setPosition(.5); //deposit
+                if(!topToggle){
+                    rightGrab.setPosition(.5); //deposit
+                }else{
+                    leftGrab.setPosition(.5);
+                }
+
             }
             if(grabberToggle == 4){
                 armOut();
-                leftGrab.setPosition(.5);  //second deposit
+                if(!topToggle){
+                    leftGrab.setPosition(.5);  //second deposit
+                }else{
+                    rightGrab.setPosition(.5);
+                }
+
             }
             if(grabberToggle ==5){
                 grab();
@@ -166,12 +188,21 @@ public class V4B_Arm {
         }
 
 
+
         if(duoToggle){
             telemetry.addData("duoToggle","2pixels");
         }
         if(!duoToggle){
             telemetry.addData("duoToggle","single");
         }
+
+        if(!topToggle){
+            telemetry.addData("topToggle","bottom then top");
+        }
+        if(topToggle){
+            telemetry.addData("topToggle","top then bottom");
+        }
+
         telemetry.addData("grabberToggle",grabberToggle);
         telemetry.addData("Left servo pos", leftArm.servo.getPosition());
         telemetry.addData("Right servo pos", rightArm.servo.getPosition());

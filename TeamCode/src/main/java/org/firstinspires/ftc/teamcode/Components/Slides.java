@@ -184,16 +184,15 @@ public class Slides {
 
                     sum+=gamepad2.gamepad.left_stick_y*secondTime.time();
 
-                }else if(gamepad1.gamepad.left_stick_y<0){
+                }else if(gamepad2.gamepad.left_stick_y<0){
                     setPower(gamepad2.gamepad.left_stick_y*0.4);
                     sum+=gamepad2.gamepad.left_stick_y*0.4*secondTime.time();
-                }else if(gamepad1.gamepad.left_stick_y<0){
+                }else{
                     setPower(0);
-                }/*else if(gamepad2.isPress(GamepadEx.Control.b)){
-                    down = !down;
-                }*/else{
-                setPower(0);
                 }
+                /*if(gamepad2.isPress(GamepadEx.Control.b)){
+                    down = !down;
+                }*/
 
                 /*
                 if(down){

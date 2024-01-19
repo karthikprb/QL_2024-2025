@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Odometry.S4T_Encoder;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.OpModes.LinearTeleOp;
 import org.firstinspires.ftc.teamcode.Vision.PixelDetector;
 import org.firstinspires.ftc.teamcode.Vision.SleeveDetectorV2;
 import org.firstinspires.ftc.teamcode.Vision.pixels;
+import org.firstinspires.ftc.teamcode.Vision.pixelsRed;
 import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -25,6 +27,8 @@ import java.util.List;
 public class Robot {
 
     public Mecanum_Drive drive;
+
+    //public Airplane airplane;
 
     public Intake intake;
 
@@ -66,7 +70,7 @@ public class Robot {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        encoderLY = new S4T_Encoder(map, "bleft");
+        encoderLY = new S4T_Encoder(map, "fleft");
         //encoderLX = new S4T_Encoder(map, "fleft");
         encoderRY = new S4T_Encoder(map, "bright");
         encoderRX = new S4T_Encoder(map, "fright");
@@ -77,6 +81,7 @@ public class Robot {
         intake = new Intake(map,telemetry);
         drive = new Mecanum_Drive(map, telemetry);
         v4b = new V4B_Arm(map,telemetry);
+        //airplane = new Airplane(map,telemetry);
 
         telemetry.update();
     }
@@ -87,6 +92,8 @@ public class Robot {
         drive.drive(gamepad1ex.gamepad,1,0.7);
         drive.write();
 
+        //airplane.launch(gamepad2ex);
+        //airplane.write();
 
         intake.intake(gamepad1ex,gamepad2ex,telemetry);
         intake.write();
@@ -132,12 +139,37 @@ public class Robot {
             }
         });
     }
-    /*
+
+    public void initializeWebcamRed(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        detector = new pixelsRed();
+        webcam.setPipeline(detector);
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                FtcDashboard.getInstance().startCameraStream(webcam, 30);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
     public double getPixelCase(){
         return((pixels)detector).getPixelPosition();
     }
 
-     */
+    public double getPixelCaseRed(){
+        return((pixelsRed)detector).getPixelPositionRed();
+    }
 
     public void stopWebcam(){
         webcam.stopStreaming();

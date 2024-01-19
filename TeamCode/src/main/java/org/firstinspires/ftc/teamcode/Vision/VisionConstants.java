@@ -30,5 +30,5 @@ public class VisionConstants {
     public static double LineFollowerTarget = 320;
 
     public static int minArea = 1000;
-    public static int horizon = 230;
+    public static int horizon = 350;
 }
