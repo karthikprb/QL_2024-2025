@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 @TeleOp
 public class Servo_Tester extends LinearOpMode {
     //Set the hardware mapping name of the servo
-    final String name = "rightgrab";
-    final String name2 = "leftgrab";
+    final String name = "leftgrab";
+    final String name2 = "rightgrab";
     Caching_Servo servo;
     Caching_Servo servo2;
 
@@ -34,10 +34,18 @@ public class Servo_Tester extends LinearOpMode {
         servo = new Caching_Servo(hardwareMap, name);
         servo2 =new Caching_Servo(hardwareMap,name2);
 
+      //  servo.setZeros(0.27, 0.95);
+      //  servo.setZeros(0.06, 0.74);
+
         waitForStart();
         while (opModeIsActive()) {
+
             servo.setPosition(ServoTester.pos);
             servo2.setPosition(ServoTester.pos2);
+
+
+
+           // manualSetPosition(ServoTester.pos);
 
             write();
             telemetry.addData("Position", servo.getPosition());

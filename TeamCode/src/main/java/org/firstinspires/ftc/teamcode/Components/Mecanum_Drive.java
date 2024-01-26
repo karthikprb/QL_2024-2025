@@ -139,7 +139,7 @@ public class Mecanum_Drive{
     }
 
     public void setPower(Vector2 vec, double rot){
-        setPower(-vec.x, -vec.y, -rot);
+        setPower(vec.x, vec.y, rot);
     }
 
     public void setPowerCentic(double x, double y, double rot, double heading){
@@ -160,7 +160,7 @@ public class Mecanum_Drive{
     }
 
     public void driveCentric(Gamepad gamepad, double maxMove, double maxTurn, double heading){
-            setPowerCentic(gamepad.left_stick_x * maxMove, gamepad.left_stick_y * maxMove, -gamepad.right_stick_x * maxTurn, heading);
+            setPowerCentic(-gamepad.left_stick_x * maxMove, -gamepad.left_stick_y * maxMove, gamepad.right_stick_x * maxTurn, heading);
 
     }
 
@@ -196,45 +196,9 @@ public class Mecanum_Drive{
         PID_Z.setTargetPosition(target_heading);
 
         if(!blue) {
-            setPowerCentic(PID_X.update(currentPos.getX()), -PID_Y.update(currentPos.getY()), -PID_Z.update(heading), currentPos.getHeading());
+            setPowerCentic(-PID_X.update(currentPos.getX()), PID_Y.update(currentPos.getY()), PID_Z.update(heading), currentPos.getHeading());
         }else {
             setPowerCentic(PID_X.update(currentPos.getX()), PID_Y.update(currentPos.getY()), PID_Z.update(heading), currentPos.getHeading());
         }
-    }
-
-    public void followLine(boolean turnPID, double target_y, double targetPixel, double current_y, double currentPixel, double yspeed, double zspeed){
-        PID_Z.setOutputBounds(-zspeed, zspeed);
-        PID_Y.setOutputBounds(-yspeed, yspeed);
-        PID_CAM.setOutputBounds(-zspeed, zspeed);
-
-        telemetry.addData("Translational Error", target_y - current_y);
-        telemetry.addData("Rotational Error", targetPixel - currentPixel);
-
-        PID_Y.setTargetPosition(target_y);
-
-        double heading = 0;
-        double target_heading = targetPixel;
-
-        if(currentPixel <= Math.PI){
-            heading = currentPixel;
-        }else{
-            heading = -((2 * Math.PI ) - currentPixel);
-        }
-
-        if(turnPID) {
-            if(Math.abs(targetPixel - heading) >= Math.toRadians(180.0)){
-                target_heading = -((2 * Math.PI) - targetPixel);
-            }
-            PID_Z.setTargetPosition(target_heading);
-        } else {
-            PID_CAM.setTargetPosition(targetPixel);
-        }
-        double rot_power = 0;
-        if(turnPID) {
-             rot_power = -PID_Z.update(heading);
-        } else {
-            rot_power = PID_CAM.update(currentPixel);
-        }
-        setPower(0, PID_Y.update(current_y), rot_power);
     }
 }

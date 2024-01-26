@@ -32,9 +32,9 @@ public class Robot {
 
     public Slides slides;
 
-    public S4T_Localizer_3 localizer;
+    public S4T_Localizer localizer;
     private S4T_Encoder encoderLY;
-    //private S4T_Encoder encoderLX;
+    private S4T_Encoder encoderLX;
     private S4T_Encoder encoderRY;
     private S4T_Encoder encoderRX;
 
@@ -67,11 +67,11 @@ public class Robot {
         }
 
         encoderLY = new S4T_Encoder(map, "bleft");
-        //encoderLX = new S4T_Encoder(map, "fleft");
+        encoderLX = new S4T_Encoder(map, "fleft");
         encoderRY = new S4T_Encoder(map, "bright");
         encoderRX = new S4T_Encoder(map, "fright");
 
-        localizer = new S4T_Localizer_3(telemetry);
+        localizer = new S4T_Localizer(telemetry);
 
         slides = new Slides(map,telemetry);
         intake = new Intake(map,telemetry);
@@ -105,7 +105,7 @@ public class Robot {
         if(gamepad1ex.isPress(GamepadEx.Control.start)){
             telemetry.addLine("Resetting...");
         }else{
-            //update();
+            update();
         }
 
 
@@ -144,15 +144,19 @@ public class Robot {
     }
 
     public void updatePos(){
-        //encoderLX.update();
+        encoderLX.update();
         encoderLY.update();
         encoderRX.update();
         encoderRY.update();
-        localizer.update(getRawLeft_Y_Dist(), getRawRight_X_Dist(), getRawRight_Y_Dist());
+        localizer.update(getRawLeft_X_Dist(), getRawLeft_Y_Dist(), getRawRight_X_Dist(), getRawRight_Y_Dist());
     }
 
     public double getRawRight_X_Dist(){
         return encoderRX.distance;
+    }
+
+    public double getRawLeft_X_Dist(){
+        return encoderLX.distance;
     }
 
     public double getRawLeft_Y_Dist(){
@@ -163,12 +167,15 @@ public class Robot {
         return encoderRY.distance;
     }
 
+
     public void resetOdo(){
+        encoderLX.reset();
         encoderLY.reset();
         encoderRY.reset();
         encoderRX.reset();
     }
     public void stopAndResetEncoders(){
+        encoderLX.stopandreset();
         encoderLY.stopandreset();
         encoderRY.stopandreset();
         encoderRX.stopandreset();
@@ -198,6 +205,10 @@ public class Robot {
     }
 
     public void GoTo(double x, double y, double heading, double maxspeed_x, double maxspeed_y, double maxspeed_z){
+        updateGoTo(new Pose2d(x, y, heading), new Pose2d(maxspeed_x, maxspeed_y, maxspeed_z));
+    }
+
+    public void GoToAlign(double x, double y, double heading, double maxspeed_x, double maxspeed_y, double maxspeed_z){
         updateGoTo(new Pose2d(x, y, heading), new Pose2d(maxspeed_x, maxspeed_y, maxspeed_z));
     }
 

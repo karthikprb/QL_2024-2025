@@ -22,7 +22,7 @@ public class V4B_Arm {
 
     ElapsedTime time = new ElapsedTime();
     ElapsedTime secondTime = new ElapsedTime();
-    public double grabberToggle = 0;
+    public static double grabberToggle = 0;
     boolean duoToggle = true;
     Telemetry telemetry;
 
@@ -34,8 +34,10 @@ public class V4B_Arm {
 
         this.telemetry = telemetry;
 
-        rightArm.setZeros(.075, 1);
-        leftArm.setZeros(.08, 1);
+        //rightArm.setZeros(.083, 1);
+        //leftArm.setZeros(.08, 1);
+
+
         //ZEROES 12/26
         //RIGHT: .075  IN     //  1  OUT
         //LEFT: 1 IN    // .08  OUT
@@ -50,38 +52,47 @@ public class V4B_Arm {
         leftGrab.setPosition(1-val);
         rightGrab.setPosition(val);
     }
-
+/*
     public void armPos(double val){
         leftArm.setPosition(1-val);
         rightArm.setPosition(val);
     }
 
+
+ */
+
+
     public void grab() {
-        leftGrab.setPosition(.67);
-        rightGrab.setPosition(.38);
+        leftGrab.setPosition(.68);
+        rightGrab.setPosition(.36);
     }
     public void deposit() {
-        leftGrab.setPosition(.5);
+        leftGrab.setPosition(.56);
         rightGrab.setPosition(.5);
     }
     public void open(){
-        leftGrab.setPosition(.54);
-        rightGrab.setPosition(.48);
+        leftGrab.setPosition(.56);
+        rightGrab.setPosition(.5);
     }
+
     public void armIn() {
-        armPos(0.01);
+       leftArm.setPosition(0.1);
+       rightArm.setPosition(0.85);
     }
-    public void armOut() { armPos(.8); }
+    public void armOut() {
+        leftArm.setPosition(0.75);
+        rightArm.setPosition(0.2);
+    }
 
     public void operate(GamepadEx gamepad, GamepadEx gamepad2, Telemetry telemetry) {
         if(gamepad2.isPress(GamepadEx.Control.x)){
             duoToggle = !duoToggle;
         }
-        if(gamepad.isPress(GamepadEx.Control.left_bumper)){
+        if(gamepad.isPress(GamepadEx.Control.left_bumper) || gamepad2.isPress(GamepadEx.Control.left_bumper)){
             grabberToggle += 1;
             time.reset();
         }
-        if(gamepad.isPress(GamepadEx.Control.left_trigger)){
+        if(gamepad.isPress(GamepadEx.Control.left_trigger) || gamepad2.isPress(GamepadEx.Control.left_trigger)){
             grabberToggle -= 1;
             time.reset();
         }

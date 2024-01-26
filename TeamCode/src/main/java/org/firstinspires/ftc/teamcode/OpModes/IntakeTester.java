@@ -26,12 +26,12 @@ public class IntakeTester extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            intake.intake(gamepadEx1,gamepadEx2,telemetry);
-            intake.intake_dropper.setPosition(IntakeT.pos);
-            intake.write();
+            intake.intake(gamepadEx1, gamepadEx2, telemetry);
+            //intake.intake_dropper.setPosition(IntakeT.pos);
 
             gamepadEx1.loop();
             gamepadEx2.loop();
+            intake.write();
         }
     }
 }

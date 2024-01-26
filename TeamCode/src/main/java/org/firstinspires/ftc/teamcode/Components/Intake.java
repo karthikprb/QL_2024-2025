@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 
 public class Intake {
     Caching_Motor intake;
-    public Caching_Servo intake_dropper;
+    //public Caching_Servo intake_dropper;
     /*
     1. 0.33
     2. 0.27
@@ -24,7 +24,7 @@ public class Intake {
 
      */
 
-    private double pos =0;
+    private double pos = 0;
     ElapsedTime time;
     Telemetry telemetry;
 
@@ -33,7 +33,7 @@ public class Intake {
 
     public Intake(HardwareMap map, Telemetry telemetry){
         intake = new Caching_Motor(map, "intake");
-        intake_dropper = new Caching_Servo(map, "intake_dropper");
+        //intake_dropper = new Caching_Servo(map, "intake_dropper");
         this.telemetry = telemetry;
 
         intake.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -46,12 +46,14 @@ public class Intake {
         intake.setPower(power);
     }
 
-    public void drop() {
+   /* public void drop() {
         intake_dropper.setPosition(.1);
     }
     public void lift(){
         intake_dropper.setPosition(0.68);
     }
+
+    */
 
     public void intake(GamepadEx gamepadEx, GamepadEx gamepad2Ex, Telemetry telemetry){
         if(gamepadEx.isPress(GamepadEx.Control.right_bumper)){
@@ -69,7 +71,7 @@ public class Intake {
             pos-=.01;
         }
 
-        intake_dropper.setPosition(0.18+pos);
+        //intake_dropper.setPosition(0.18+pos);
 
         if(intakeToggle){
             intake.setPower(1);
@@ -77,7 +79,7 @@ public class Intake {
             intake.setPower(-gamepadEx.gamepad.right_trigger);
         }
 
-        telemetry.addData("intake_dropper",intake_dropper.getPosition());
+       // telemetry.addData("intake_dropper",intake_dropper.getPosition());
 
     }
 
@@ -86,6 +88,6 @@ public class Intake {
 
     public void write(){
         intake.write();
-        intake_dropper.write();
+        //intake_dropper.write();
     }
 }
