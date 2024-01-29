@@ -143,12 +143,8 @@ public class Mecanum_Drive{
     }
 
     public void setPowerCentic(double x, double y, double rot, double heading){
-        if(blue) {
-            heading -= Math.PI;
-            setPower(new Vector2(x, y).rotated((heading) + Math.PI), rot);
-        }else{
-            setPower(new Vector2(x, y).rotated(((2 * Math.PI) - heading) + Math.PI), rot);
-        }
+        setPower(new Vector2(x, y).rotated(((2 * Math.PI) - heading) + Math.PI), rot);
+
     }
 
     public void drive(Gamepad gamepad, double scale, double turnScale, double maxMove, double maxTurn){

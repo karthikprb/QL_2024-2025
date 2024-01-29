@@ -63,21 +63,32 @@ public class V4B_Arm {
 
 
     public void grab() {
-        leftGrab.setPosition(.68);
-        rightGrab.setPosition(.36);
+        leftGrab.setPosition(.7);
+        rightGrab.setPosition(0.3);
     }
+
     public void deposit() {
-        leftGrab.setPosition(.56);
+        leftGrab.setPosition(.4);
         rightGrab.setPosition(.5);
     }
     public void open(){
-        leftGrab.setPosition(.56);
-        rightGrab.setPosition(.5);
+        leftGrab.setPosition(.4);
+        rightGrab.setPosition(.4);
+    }
+
+    public void armMid() {
+        leftArm.setPosition(0.14);
+        rightArm.setPosition(0.81);
     }
 
     public void armIn() {
-       leftArm.setPosition(0.1);
-       rightArm.setPosition(0.85);
+       leftArm.setPosition(0.11);
+       rightArm.setPosition(0.84);
+    }
+
+    public void armUp() {
+        leftArm.setPosition(0.1);
+        rightArm.setPosition(0.85);
     }
     public void armOut() {
         leftArm.setPosition(0.75);
@@ -103,12 +114,17 @@ public class V4B_Arm {
                 grabberToggle = 0;
             }
             if(grabberToggle == 0){
-                armIn();
+                armMid();
+                if(time.time() > 2){
+                    armIn();
+                }
                 open();
             }
             if(grabberToggle == 1){
-                armIn();
-                grab();
+                armUp();
+                if(time.time() > 0.15){
+                    grab();
+                }
             }
             if(grabberToggle == 2){
                 grab();
@@ -139,12 +155,17 @@ public class V4B_Arm {
                 grabberToggle = 0;
             }
             if(grabberToggle == 0){
-                armIn();
+                armMid();
+                if(time.time() > 2){
+                    armIn();
+                }
                 open();
             }
             if(grabberToggle == 1){
-                armIn();
-                grab();
+                armUp();
+                if(time.time() > 0.15){
+                    grab();
+                }
             }
             if(grabberToggle == 2){
                 grab();

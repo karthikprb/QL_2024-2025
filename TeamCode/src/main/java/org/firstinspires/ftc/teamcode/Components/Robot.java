@@ -26,17 +26,20 @@ public class Robot {
 
     public Mecanum_Drive drive;
 
+    public boolean robotCentric = false;
     public Intake intake;
+
+    public Airplane plane;
 
     public V4B_Arm v4b;
 
     public Slides slides;
 
-    public S4T_Localizer localizer;
+    public S4T_Localizer_3 localizer;
     private S4T_Encoder encoderLY;
     private S4T_Encoder encoderLX;
     private S4T_Encoder encoderRY;
-    private S4T_Encoder encoderRX;
+    //private S4T_Encoder encoderRX;
 
     private Pose2d OFFSET = new Pose2d(0,0,0);
 
@@ -69,14 +72,15 @@ public class Robot {
         encoderLY = new S4T_Encoder(map, "bleft");
         encoderLX = new S4T_Encoder(map, "fleft");
         encoderRY = new S4T_Encoder(map, "bright");
-        encoderRX = new S4T_Encoder(map, "fright");
+        //encoderRX = new S4T_Encoder(map, "fright");
 
-        localizer = new S4T_Localizer(telemetry);
+        localizer = new S4T_Localizer_3(telemetry);
 
         slides = new Slides(map,telemetry);
         intake = new Intake(map,telemetry);
         drive = new Mecanum_Drive(map, telemetry);
         v4b = new V4B_Arm(map,telemetry);
+        plane = new Airplane(map, telemetry);
 
         telemetry.update();
     }
@@ -85,6 +89,7 @@ public class Robot {
         telemetry.addLine("MAKE SURE TO HIT RIGHT TRIGGER");
 
         drive.drive(gamepad1ex.gamepad,1,0.7);
+
         drive.write();
 
 
@@ -99,14 +104,23 @@ public class Robot {
         v4b.operate(gamepad1ex,gamepad2ex,telemetry);
         v4b.write();
 
+        plane.operate(gamepad2ex,telemetry);
+        plane.write();
+
         gamepad1ex.loop();
         gamepad2ex.loop();
 
+        telemetry.addData("Heading",Math.toDegrees(getPos().getHeading()));
+        telemetry.addData("Field Centric:", !robotCentric);
+
+
         if(gamepad1ex.isPress(GamepadEx.Control.start)){
             telemetry.addLine("Resetting...");
+            localizer.resetHeading();
         }else{
             update();
         }
+
 
 
     }
@@ -146,14 +160,16 @@ public class Robot {
     public void updatePos(){
         encoderLX.update();
         encoderLY.update();
-        encoderRX.update();
+        //encoderRX.update();
         encoderRY.update();
-        localizer.update(getRawLeft_X_Dist(), getRawLeft_Y_Dist(), getRawRight_X_Dist(), getRawRight_Y_Dist());
+        localizer.update(getRawLeft_Y_Dist(), getRawLeft_X_Dist(), getRawRight_Y_Dist());
     }
 
-    public double getRawRight_X_Dist(){
+    /*public double getRawRight_X_Dist(){
         return encoderRX.distance;
     }
+
+     */
 
     public double getRawLeft_X_Dist(){
         return encoderLX.distance;
@@ -172,13 +188,13 @@ public class Robot {
         encoderLX.reset();
         encoderLY.reset();
         encoderRY.reset();
-        encoderRX.reset();
+        //encoderRX.reset();
     }
     public void stopAndResetEncoders(){
         encoderLX.stopandreset();
         encoderLY.stopandreset();
         encoderRY.stopandreset();
-        encoderRX.stopandreset();
+        //encoderRX.stopandreset();
 
         localizer.reset();
     }
@@ -231,6 +247,8 @@ public class Robot {
         for (LynxModule module : allHubs) {
             module.clearBulkCache();
         }
+
+        updatePos();
     }
 
 
