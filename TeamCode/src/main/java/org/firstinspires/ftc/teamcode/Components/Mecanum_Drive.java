@@ -31,11 +31,11 @@ public class Mecanum_Drive{
 
     PIDFController PID_CAM;
 
-    public static double kp = 0.1365;
+    public static double kp = 0.09;
     public static double ki = 0;
-    public static double kd = 0.01385;
+    public static double kd = 0.0138;
 
-    public static double kpr = 2.7;
+    public static double kpr = 2.1;
     public static double kir = 0;
     public static double kdr = 0.115;
 

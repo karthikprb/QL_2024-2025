@@ -50,7 +50,7 @@ public class Slides {
 
     boolean hangToggle = false;
 
-    TouchSensor touchSensor;
+    public TouchSensor touchSensor;
 
     public enum STATE{
         AUTO,

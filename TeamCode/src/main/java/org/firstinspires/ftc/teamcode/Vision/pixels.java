@@ -34,7 +34,7 @@ public class pixels extends OpenCvPipeline {
 
     int numContoursFound = 0;
 
-    public int pixelCase =0;
+    public int pixelCase;
 
     Rect pixelRect = new Rect();
 
@@ -75,13 +75,14 @@ public class pixels extends OpenCvPipeline {
         for(MatOfPoint contour : contoursList){
             Moments moments = Imgproc.moments(contour);
 
-            double area = moments.m00;
+            double area = Imgproc.contourArea(contour);
 
             Point center = calculateCentroid(moments);
             if(area>= pixelss.threshold){
                 contThree.add(contour);
             }
         }
+
         contThree.sort(new sortArr());
 
 
@@ -103,6 +104,15 @@ public class pixels extends OpenCvPipeline {
             Imgproc.drawContours(contoursOnFrameMat, contThree, 0, new Scalar(255,255,255));
             Imgproc.drawContours(contoursOnFrameMat, contThree, 1, new Scalar(255,255,255));
             Imgproc.drawContours(contoursOnFrameMat, contThree, 2, new Scalar(255,255,255));
+
+            if(Imgproc.contourArea(contThree.get(1))>600){
+                pixelCase = 1;
+            } else if (Imgproc.contourArea(contThree.get(0))>600) {
+                pixelCase = 2;
+            }else{
+                pixelCase = 3;
+            }
+
         }
 
         return contoursOnFrameMat;
@@ -115,21 +125,17 @@ class sortArr implements Comparator<MatOfPoint> {
     {
         Moments aMom = Imgproc.moments(a);
         Moments bMom = Imgproc.moments(b);
-        if(pixels.calculateCentroid(aMom).x > pixels.calculateCentroid(bMom).x){
-            return 1;
-        }else{
-            return 0;
-        }
+        return Double.compare(pixels.calculateCentroid(aMom).x, pixels.calculateCentroid(bMom).x);
     }
 }
 @Config
 class pixelss{
     public static int lowerBlueH = 0;
-    public static int lowerBlueS = 140;
-    public static int lowerBlueV = 45;
+    public static int lowerBlueS = 110;
+    public static int lowerBlueV = 10;
     public static int upperBlueH = 130;
     public static int upperBlueS = 255;
     public static int upperBlueV =255;
 
-    public static int threshold = 0;
+    public static int threshold = 300;
 }

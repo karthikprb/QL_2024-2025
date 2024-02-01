@@ -55,8 +55,13 @@ public class Intake {
 
     */
     public void outtakeDeposit(){
-        intake.setPower(-.3);
+        intake.setPower(-.4);
     }
+
+    public void stop(){
+        intake.setPower(0);
+    }
+
     public void intake(GamepadEx gamepadEx, GamepadEx gamepad2Ex, Telemetry telemetry){
         if(gamepadEx.isPress(GamepadEx.Control.right_bumper)){
             intakeToggle = !intakeToggle;

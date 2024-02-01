@@ -35,11 +35,11 @@ public class Robot {
 
     public Slides slides;
 
-    public S4T_Localizer_3 localizer;
+    public S4T_Localizer localizer;
     private S4T_Encoder encoderLY;
     private S4T_Encoder encoderLX;
     private S4T_Encoder encoderRY;
-    //private S4T_Encoder encoderRX;
+    private S4T_Encoder encoderRX;
 
     private Pose2d OFFSET = new Pose2d(0,0,0);
 
@@ -72,9 +72,9 @@ public class Robot {
         encoderLY = new S4T_Encoder(map, "bleft");
         encoderLX = new S4T_Encoder(map, "fleft");
         encoderRY = new S4T_Encoder(map, "bright");
-        //encoderRX = new S4T_Encoder(map, "fright");
+        encoderRX = new S4T_Encoder(map, "fright");
 
-        localizer = new S4T_Localizer_3(telemetry);
+        localizer = new S4T_Localizer(telemetry);
 
         slides = new Slides(map,telemetry);
         intake = new Intake(map,telemetry);
@@ -116,7 +116,7 @@ public class Robot {
 
         if(gamepad1ex.isPress(GamepadEx.Control.start)){
             telemetry.addLine("Resetting...");
-            localizer.resetHeading();
+            localizer.reset();
         }else{
             update();
         }
@@ -146,12 +146,12 @@ public class Robot {
             }
         });
     }
-    /*
+
     public double getPixelCase(){
         return((pixels)detector).getPixelPosition();
     }
 
-     */
+
 
     public void stopWebcam(){
         webcam.stopStreaming();
@@ -160,27 +160,26 @@ public class Robot {
     public void updatePos(){
         encoderLX.update();
         encoderLY.update();
-        //encoderRX.update();
+        encoderRX.update();
         encoderRY.update();
-        localizer.update(getRawLeft_Y_Dist(), getRawLeft_X_Dist(), getRawRight_Y_Dist());
+        localizer.update(getRawLeft_X_Dist(),getRawLeft_Y_Dist(), getRawRight_X_Dist(), getRawRight_Y_Dist());
     }
 
-    /*public double getRawRight_X_Dist(){
+    public double getRawRight_X_Dist(){
         return encoderRX.distance;
     }
 
-     */
 
     public double getRawLeft_X_Dist(){
         return encoderLX.distance;
     }
 
     public double getRawLeft_Y_Dist(){
-        return encoderLY.distance;
+        return -encoderLY.distance;
     }
 
     public double getRawRight_Y_Dist(){
-        return encoderRY.distance;
+        return -encoderRY.distance;
     }
 
 
@@ -188,13 +187,13 @@ public class Robot {
         encoderLX.reset();
         encoderLY.reset();
         encoderRY.reset();
-        //encoderRX.reset();
+        encoderRX.reset();
     }
     public void stopAndResetEncoders(){
         encoderLX.stopandreset();
         encoderLY.stopandreset();
         encoderRY.stopandreset();
-        //encoderRX.stopandreset();
+        encoderRX.stopandreset();
 
         localizer.reset();
     }

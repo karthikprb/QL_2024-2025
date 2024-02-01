@@ -72,8 +72,8 @@ public class V4B_Arm {
         rightGrab.setPosition(.5);
     }
     public void open(){
-        leftGrab.setPosition(.4);
-        rightGrab.setPosition(.4);
+        leftGrab.setPosition(.6);
+        rightGrab.setPosition(.48);
     }
 
     public void armMid() {
@@ -82,13 +82,13 @@ public class V4B_Arm {
     }
 
     public void armIn() {
-       leftArm.setPosition(0.11);
-       rightArm.setPosition(0.84);
+       leftArm.setPosition(0.1);
+       rightArm.setPosition(0.85);
     }
 
     public void armUp() {
-        leftArm.setPosition(0.1);
-        rightArm.setPosition(0.85);
+        leftArm.setPosition(0.09);
+        rightArm.setPosition(0.86);
     }
     public void armOut() {
         leftArm.setPosition(0.75);
