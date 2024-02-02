@@ -27,7 +27,7 @@ public class pixelsRed extends OpenCvPipeline {
 
     public int pixelCase = 0;
     public double blurConstant = 1;
-    public double dilationConstant = 2;
+    public double dilationConstant = 4;
 
     ArrayList<MatOfPoint> contThree = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class pixelsRed extends OpenCvPipeline {
 
 
 
-    public int getPixelPositionRed(){
+    public int getPixelPosition(){
         return pixelCase;
     }
 
@@ -49,8 +49,8 @@ public class pixelsRed extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
 
         //Config Scalars
-        Scalar lowerBlue = new Scalar(pixelssRed.lowerRedH,pixelssRed.lowerRedS,pixelssRed.lowerRedV);
-        Scalar upperBlue = new Scalar(pixelssRed.upperRedH,pixelssRed.upperRedS,pixelssRed.upperRedV);
+        Scalar lowerBlue = new Scalar(pixelssRed.lowerBlueH,pixelssRed.lowerBlueS,pixelssRed.lowerBlueV);
+        Scalar upperBlue = new Scalar(pixelssRed.upperBlueH,pixelssRed.upperBlueS,pixelssRed.upperBlueV);
 
         //List clears
         contoursList.clear();
@@ -63,19 +63,21 @@ public class pixelsRed extends OpenCvPipeline {
 
         //kernels
         Size kernelSize2 =  new  Size(2 * dilationConstant + 1, 2 * dilationConstant + 1);
+        Size kernelSize3 = new Size(dilationConstant*2/3+1,dilationConstant*2/3+1);
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, kernelSize2);
+        Mat kernel2 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernelSize3);
         Size kernelSize = new Size(blurConstant, blurConstant);
-
+        /*
         //Dilation
         Imgproc.dilate(HSVMat, HSVMat, kernel);
 
         //Erosion
 
-        //Imgproc.erode(HSVMat,HSVMat,kernel);
+        Imgproc.erode(HSVMat,HSVMat,kernel2);
 
         //Blurs the image
         Imgproc.GaussianBlur(HSVMat, HSVMat, kernelSize, 0);
-
+        */
         //Mask
         Mat blueMask = new Mat();
 
@@ -159,14 +161,14 @@ class sortArrRed implements Comparator<MatOfPoint> {
 //dash values
 @Config
 class pixelssRed{
-    public static int lowerRedH = 0;
-    public static int lowerRedS = 140;
-    public static int lowerRedV = 20;
-    public static int upperRedH = 130;
-    public static int upperRedS = 255;
-    public static int upperRedV =255;
+    public static int lowerBlueH = 30;
+    public static int lowerBlueS = 80;
+    public static int lowerBlueV = 10;
+    public static int upperBlueH = 200;
+    public static int upperBlueS = 255;
+    public static int upperBlueV =255;
 
-    public static int threshold = 100;
+    public static int threshold = 400;
 
     public static int horizon = 150;
 

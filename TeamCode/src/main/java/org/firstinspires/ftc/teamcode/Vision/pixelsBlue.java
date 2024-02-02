@@ -1,34 +1,23 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
-import static org.firstinspires.ftc.teamcode.Vision.SleeveDetectorV2Constants.BOUNDING_BOX;
-import static org.firstinspires.ftc.teamcode.Vision.VisionConstants.horizon;
-import static org.opencv.imgproc.Imgproc.CV_SHAPE_ELLIPSE;
-
-import android.graphics.Bitmap;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
-import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
-import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 
-public class pixels extends OpenCvPipeline {
+public class pixelsBlue extends OpenCvPipeline {
     Mat HSVMat = new Mat();
     Mat contoursOnFrameMat = new Mat();
     List<MatOfPoint> contoursList = new ArrayList<>();
@@ -60,8 +49,8 @@ public class pixels extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
 
         //Config Scalars
-        Scalar lowerBlue = new Scalar(pixelss.lowerBlueH,pixelss.lowerBlueS,pixelss.lowerBlueV);
-        Scalar upperBlue = new Scalar(pixelss.upperBlueH,pixelss.upperBlueS,pixelss.upperBlueV);
+        Scalar lowerBlue = new Scalar(pixelssBlue.lowerBlueH,pixelssBlue.lowerBlueS,pixelssBlue.lowerBlueV);
+        Scalar upperBlue = new Scalar(pixelssBlue.upperBlueH,pixelssBlue.upperBlueS,pixelssBlue.upperBlueV);
 
         //List clears
         contoursList.clear();
@@ -110,13 +99,13 @@ public class pixels extends OpenCvPipeline {
             double area = moments.m00;
 
             Point center = calculateCentroid(moments);
-            if(area>= pixelss.threshold && center.y>=pixelss.horizon){
+            if(area>= pixelssBlue.threshold && center.y>=pixelssBlue.horizon){
                 contThree.add(contour);
             }
         }
 
         //sort by X val
-        contThree.sort(new sortArr());
+        contThree.sort(new sortArrBlue());
 
 
 
@@ -156,12 +145,12 @@ public class pixels extends OpenCvPipeline {
 }
 
 //Comparator
-class sortArr implements Comparator<MatOfPoint> {
+class sortArrBlue implements Comparator<MatOfPoint> {
     public int compare(MatOfPoint a, MatOfPoint b)
     {
         Moments aMom = Imgproc.moments(a);
         Moments bMom = Imgproc.moments(b);
-        if(pixels.calculateCentroid(aMom).x > pixels.calculateCentroid(bMom).x){
+        if(pixelsBlue.calculateCentroid(aMom).x > pixelsBlue.calculateCentroid(bMom).x){
             return 1;
         }else{
             return -1;
@@ -171,7 +160,7 @@ class sortArr implements Comparator<MatOfPoint> {
 
 //dash values
 @Config
-class pixelss{
+class pixelssBlue{
     public static int lowerBlueH = 0;
     public static int lowerBlueS = 140;
     public static int lowerBlueV = 20;
