@@ -78,7 +78,7 @@ public class pixels extends OpenCvPipeline {
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, kernelSize2);
         Mat kernel2 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,kernelSize3);
         Size kernelSize = new Size(blurConstant, blurConstant);
-
+        /*
         //Dilation
         Imgproc.dilate(HSVMat, HSVMat, kernel);
 
@@ -88,7 +88,7 @@ public class pixels extends OpenCvPipeline {
 
         //Blurs the image
         Imgproc.GaussianBlur(HSVMat, HSVMat, kernelSize, 0);
-
+        */
         //Mask
         Mat blueMask = new Mat();
 

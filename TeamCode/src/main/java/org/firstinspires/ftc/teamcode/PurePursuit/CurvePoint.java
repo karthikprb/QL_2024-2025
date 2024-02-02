@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.PurePursuit;
 
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+
 
 public class CurvePoint {
     public double x;
@@ -10,6 +12,7 @@ public class CurvePoint {
     public double turnSpeed;
     public double followDistance;
     public double heading;
+
 
     public CurvePoint(double x, double y, double moveSpeed, double turnSpeed, double followDistance, double heading){
         this.x = x;
@@ -20,6 +23,7 @@ public class CurvePoint {
         this.heading = heading;
     }
 
+
     public CurvePoint(Pose2d target, double moveSpeed, double turnSpeed, double followDistance){
         this.x = target.getX();
         this.y = target.getY();
@@ -29,10 +33,12 @@ public class CurvePoint {
         this.heading = target.getHeading();
     }
 
+
     public void flip(){
         this.x = -this.x;
         this.heading = 2 * Math.PI - this.heading;
     }
+
 
     public CurvePoint(CurvePoint thisPoint){
         this.x = thisPoint.x;
@@ -43,18 +49,26 @@ public class CurvePoint {
         this.heading = thisPoint.heading;
     }
 
+
     public Vector2d toVec(){
         return new Vector2d(x, y);
     }
 
+
     public Pose2d toPose(){
         return new Pose2d(x, y, heading);
     }
+
 
     public void setPoint(Vector2d Point) {
         this.x = Point.getX();
         this.y = Point.getY();
     }
 }
+
+
+
+
+
 
 

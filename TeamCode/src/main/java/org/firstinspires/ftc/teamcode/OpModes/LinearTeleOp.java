@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Components.Robot;
 import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
@@ -12,6 +13,7 @@ public class LinearTeleOp extends LinearOpMode {
     GamepadEx gamepadEx1;
     GamepadEx gamepadEx2;
 
+    DcMotor motor;
     @Override
     public void runOpMode() {
         robot = new Robot(hardwareMap,telemetry);

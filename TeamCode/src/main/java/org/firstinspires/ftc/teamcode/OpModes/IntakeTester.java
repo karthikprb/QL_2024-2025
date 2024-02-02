@@ -26,15 +26,12 @@ public class IntakeTester extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            intake.intake(gamepadEx1,gamepadEx2,telemetry);
-            intake.intake_dropper.setPosition(IntakeT.pos);
-            intake.intake_key.setPosition(IntakeT.keyPos);
-            intake.intake_key.write();
-            intake.intake_dropper.write();
-            intake.intake.write();
+            intake.intake(gamepadEx1, gamepadEx2, telemetry);
+            //intake.intake_dropper.setPosition(IntakeT.pos);
 
             gamepadEx1.loop();
             gamepadEx2.loop();
+            intake.write();
         }
     }
 }
@@ -44,5 +41,4 @@ public class IntakeTester extends LinearOpMode {
 class IntakeT {
     //Set the set/start position of the servo in dashboard
     public static double pos = 0;
-    public static double keyPos = 0;
 }

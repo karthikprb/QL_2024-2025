@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -28,7 +29,7 @@ public class Track_Width_Tuner extends LinearOpMode {
         gamepad1ex = new GamepadEx(gamepad1);
         robot.stopAndResetEncoders();
 
-        //robot.setStartPose(new Pose2d(0,0, Math.toRadians(90)));
+        robot.setStartPose(new Pose2d(0, 0,Math.toRadians(0)));
         waitForStart();
 
         while (opModeIsActive())
@@ -43,13 +44,13 @@ public class Track_Width_Tuner extends LinearOpMode {
             robot.updatePos();
 
             if(running){
-                //robot.drive.setPower(0, 0, 0.3);
-                //robot.drive.write();
-                robot.GoTo(0, 0, 14 * Math.PI, 1.0, 1.0, 0.3);
+                robot.drive.setPower(0, 0, 0.3);
+                robot.drive.write();
+                //robot.GoTo(0, 0, 14 * Math.PI, 1.0, 1.0, 0.3);
             }else if(running2){
-                //robot.drive.setPower(0, 0, -0.3);
-                //robot.drive.write();
-                robot.GoTo(0, 0, -14 * Math.PI, 1.0, 1.0, 0.3);
+                robot.drive.setPower(0, 0, -0.3);
+                robot.drive.write();
+                //robot.GoTo(0, 0, -14 * Math.PI, 1.0, 1.0, 0.3);
             }else{
                 robot.drive.driveCentric(gamepad1, 1.0, 1.0, robot.getPos().getHeading());
                 robot.drive.write();
@@ -65,12 +66,12 @@ public class Track_Width_Tuner extends LinearOpMode {
             telemetry.addData("Pos: ", robot.getPos());
 
             telemetry.addData("Refresh Rate", (System.currentTimeMillis() - prevTime)/1000.0);
-            telemetry.addData("Right X RAW", robot.getRawRight_X_Dist());
-            //telemetry.addData("Left X RAW", robot.getRawLeft_X_Dist());
+            telemetry.addData("Left X RAW", robot.getRawLeft_X_Dist());
+            telemetry.addData("Left X RAW", robot.getRawLeft_X_Dist());
             telemetry.addData("Right Y RAW", robot.getRawRight_Y_Dist());
             telemetry.addData("Left Y RAW", robot.getRawLeft_Y_Dist());
-            //telemetry.addData("Difference X", Math.abs(robot.getRawRight_X_Dist()));
-            //telemetry.addData("Sum X", robot.getRawRight_X_Dist());
+            //telemetry.addData("Difference X", Math.abs(robot.getRawRight_X_Dist() + robot.getRawLeft_X_Dist()));
+            telemetry.addData("Sum X", robot.getRawLeft_X_Dist());
             telemetry.addData("Difference Y", Math.abs(robot.getRawRight_Y_Dist() - robot.getRawLeft_Y_Dist()));
             telemetry.addData("Sum Y", robot.getRawRight_Y_Dist() + robot.getRawLeft_Y_Dist());
 
