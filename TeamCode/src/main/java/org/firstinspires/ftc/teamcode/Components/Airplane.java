@@ -41,12 +41,12 @@ public class Airplane {
 
     public void operate(GamepadEx gamepad2Ex, Telemetry telemetry){
 
-        if(gamepad2Ex.isPress(GamepadEx.Control.right_bumper)){
+        if(gamepad2Ex.isPress(GamepadEx.Control.left_trigger)){
             planeToggle = !planeToggle;
         }
 
         if(planeToggle){
-            plane.setPower(1);
+            plane.setPower(-1);
         } else {
             plane.setPower(0);
         }

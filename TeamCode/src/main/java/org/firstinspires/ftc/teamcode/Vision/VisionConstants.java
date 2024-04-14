@@ -18,6 +18,13 @@ public class VisionConstants {
     public static double upperSBlue = 255;
     public static double upperVBlue = 255;
 
+    public static double lowerWhiteH = 160;
+    public static double lowerWhiteS = 110;
+    public static double lowerWhiteV = 80;
+    public static double upperWhiteH = 180;
+    public static double upperWhiteS = 255;
+    public static double upperWhiteV = 255;
+
 
     public static double STACK_HEIGHT = 9.6;
 

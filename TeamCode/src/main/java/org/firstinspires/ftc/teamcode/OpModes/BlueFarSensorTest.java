@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 
 
-import android.text.method.Touch;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -25,8 +23,8 @@ import org.firstinspires.ftc.teamcode.PurePursuit.RobotMovement;
 import java.util.ArrayList;
 
 
-@Autonomous(name="BlueFar")
-public class BlueFar extends LinearOpMode {
+@Autonomous(name="BlueFarSensorTest")
+public class BlueFarSensorTest extends LinearOpMode {
 
 
     private enum State {
@@ -69,17 +67,27 @@ public class BlueFar extends LinearOpMode {
 
 
     //First Position (Center of Tile of the Three Pieces of Tape)
-    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(5, 53, Math.toRadians(90));
+    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(5, 50.5, Math.toRadians(90));
 
-    public Pose2d STACK = new Pose2d(18, 53.75, Math.toRadians(90));
+    public Pose2d STACK = new Pose2d(20.7, 51, Math.toRadians(90));
 
-    public Pose2d STACK_2 = new Pose2d(21.5, 54.9, Math.toRadians(90));
+    public Pose2d STACK_2 = new Pose2d(21.3, 55, Math.toRadians(90));
+
+    public Pose2d STACK_3 = new Pose2d(21.2, 49, Math.toRadians(90));
+
 
     ;
 
-    public Pose2d CROSS_BARRIER = new Pose2d(-50, 56, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER = new Pose2d(-66, 55, Math.toRadians(90));
 
-    public Pose2d CROSS_BARRIER_2 = new Pose2d(-50, 62, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER_2 = new Pose2d(-59, 54, Math.toRadians(90));
+
+    public Pose2d EXTRAPOSITION_1 = new Pose2d(-70, 50, Math.toRadians(90));
+
+
+    public Pose2d EXTRABACKPOSITION_1 = new Pose2d(-65, 43, Math.toRadians(90));
+
+    public Pose2d EXTRAPOSITION_2 = new Pose2d(-80, 35, Math.toRadians(90));
 
 
 
@@ -111,14 +119,22 @@ public class BlueFar extends LinearOpMode {
     public Pose2d DEPOSIT_MID = new Pose2d(-68, 27, Math.toRadians(90));
 
 
-    public Pose2d LEFT_DEPOSIT = new Pose2d(-89, 19, Math.toRadians(90));
+    public Pose2d LEFT_DEPOSIT = new Pose2d(-90.9, 13, Math.toRadians(90));
 
 
     //Actual Middle Deposit
-    public Pose2d MID_DEPOSIT =  new Pose2d(-89, 14, Math.toRadians(90));
+    public Pose2d MID_DEPOSIT =  new Pose2d(-91, 18, Math.toRadians(90));
 
 
-    public Pose2d RIGHT_DEPOSIT =  new Pose2d(-89, 25.2, Math.toRadians(90));
+    public Pose2d EXTRA_MID =  new Pose2d(-91, 15, Math.toRadians(90));
+
+
+    public Pose2d RIGHT_DEPOSIT =  new Pose2d(-90.4, 18, Math.toRadians(90));
+
+    public Pose2d EXTRA_RIGHT =  new Pose2d(-90, 21, Math.toRadians(90));
+
+
+
 
 
     public Pose2d PARK_RIGHT =  new Pose2d(-82.8, 25.2, Math.toRadians(90));
@@ -146,15 +162,16 @@ public class BlueFar extends LinearOpMode {
     double bufferHeading = 0;
 
     double pos = 0;
+    double pos2 = .35;
 
-    boolean stackPosition = false;
+    boolean go = true;
 
     double returning = 0;
     double moveSpeed = 1.0;
     double turnSpeed = 1.0;
 
-    double distanceL = 0;
-    double distanceR = 0;
+    boolean distanceL;
+    boolean distanceR;
 
     double distanceFront = 0;
 
@@ -166,7 +183,7 @@ public class BlueFar extends LinearOpMode {
 
     DistanceSensor wallStackDetect;
 
-    DistanceSensor robotDetect;
+    DistanceSensor sideWallDetect;
 
 
 
@@ -174,6 +191,7 @@ public class BlueFar extends LinearOpMode {
 
     ElapsedTime secondTime;
 
+    ElapsedTime goTime;
     NormalizedColorSensor colorSensor;
     Robot robot;
 
@@ -183,6 +201,7 @@ public class BlueFar extends LinearOpMode {
         robot = new Robot(hardwareMap, telemetry);
         time = new ElapsedTime();
         secondTime = new ElapsedTime();
+        goTime = new ElapsedTime();
         robot.setStartPose(new Pose2d(0, 0, 0));
         robot.stopAndResetEncoders();
 
@@ -195,8 +214,6 @@ public class BlueFar extends LinearOpMode {
             telemetry.addData("Robot Pos", robot.getPos());
             frontTray = hardwareMap.get(TouchSensor.class, "trayfront");
             backTray = hardwareMap.get(TouchSensor.class, "trayback");
-            wallStackDetect = hardwareMap.get(DistanceSensor.class, "front");
-            //robotDetect = hardwareMap.get(DistanceSensor.class, "side_robotDetect");
             robot.v4b.open();
             robot.v4b.armMid();
             robot.v4b.autoGrab();
@@ -204,9 +221,9 @@ public class BlueFar extends LinearOpMode {
             try {
                 pixelCase = robot.blueGetFarPixelCase();
             } catch(Exception e){
-                pixelCase = BlueFarPath.value;
+                pixelCase = BlueFarPathSensor.value;
             }
-            pos = 0.39;
+            pos = 0.45;
             telemetry.addData("Case", pixelCase);
             robot.update();
             robot.updatePos();
@@ -350,150 +367,169 @@ public class BlueFar extends LinearOpMode {
 
 
                 case STACK:
+                    PPIND = true;
+                    gtp = false;
+                    distanceL = frontTray.isPressed();
+                    distanceR = backTray.isPressed();
                     robot.v4b.open();
+                    points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.62, 0.62,10));
 
                     if(cycle == 1) {
-                            points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.62, 0.62, 10));
-                            points.add(new CurvePoint(STACK_2, 0.35, 0.35, 10));
+                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 70) {
+                            points.add(new CurvePoint(STACK, 0.4, 0.4, 10));
+                        }
                     } else if (cycle == 2){
-                            points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.62, 0.62, 10));
-                            points.add(new CurvePoint(STACK_2, 0.35, 0.35, 10));
-
+                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 70) {
+                            points.add(new CurvePoint(STACK_2, 0.4, 0.4, 10));
+                        }
                     } else {
-                            points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.62, 0.62,10));
                             points.add(new CurvePoint(STACK, 0.5, 0.5, 10));
                     }
 
+                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
+                        goTime.startTime();
                         if (cycle == 1 || cycle == 2) {
-                            robot.intake.intake_dropper.setPosition(0.9);
-                            if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
-                                if (time.time() > 0.8) {
-                                    if (time.time() > 0.5 && time.time() < 2.0) {
-                                        robot.intake.intake_dropper.setPosition(0.65);
+                                    if (distanceL && distanceR) {
+                                        robot.intake.intake_dropper.setPosition(0.3);
                                         newState(State.BARRIER_CROSS);
+                                        pos = pos+.07;
+                                        go = true;
                                     } else {
-                                        robot.intake.intakeSet(1.0);
+                                        if (cycle == 1) {
+                                            if(go){
+                                                pos+=.0007;
+                                            }
+
+                                            if(goTime.time()>.1){
+                                                go = !go;
+                                                goTime.reset();
+                                            }
+                                            robot.intake.intake_dropper.setPosition(pos);
+                                        } else if (cycle == 2) {
+                                            if(go){
+                                                pos+=.0007;
+                                            }
+
+                                            if(goTime.time()>.1){
+                                                go = !go;
+                                                goTime.reset();
+                                            }
+                                            robot.intake.intake_dropper.setPosition(pos);
+                                        }
                                     }
-                                }
                             } else {
-                                time.reset();
+
+                                    if (distanceL && distanceR) {
+                                        pos = pos2+.07;
+                                        robot.intake.intake_dropper.setPosition(0.3);
+                                    newState(State.BARRIER_CROSS);
+                                    go = true;
+
+                                }
+                                 else {
+                                     if(go){
+                                         pos2+=.0007;
+                                     }
+
+                                        if(goTime.time()>.1){
+                                            go = !go;
+                                            goTime.reset();
+                                        }
+
+                                    robot.intake.intake_dropper.setPosition(pos2);
+
+                                }
                             }
                         } else {
-                            if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
-                                pos += 0.001;
-                                robot.intake.intake_dropper.setPosition(pos);
-                                robot.intake.intakeSet(1.0);
-                                if (time.time() > 2 && time.time() < 4) {
-                                    robot.intake.intake_dropper.setPosition(0.65);
-                                } else if(time.time() > 4){
-                                    newState(State.BARRIER_CROSS);
-                                }
-                            } else {
-                                time.reset();
-                                robot.intake.intake_dropper.setPosition(pos);
+                            time.reset();
+                            if (cycle == 0) {
+                                robot.intake.intakeSet(1);
+                            } else if (cycle == 1 || cycle == 2) {
+                                robot.intake.intakeSet(1);
                             }
                         }
-                        break;
+                    break;
 
                 case BARRIER_CROSS:
-                    boolean CASES = false;
                     PPIND = true;
                     gtp = false;
+                    robot.intake.intake_dropper.setPosition(0.3);
 
-                    distanceFront = wallStackDetect.getDistance(DistanceUnit.INCH);
+                        points.add(new CurvePoint(STACK, 0.7, 0.7, 10));
+                        points.add(new CurvePoint(CROSS_BARRIER, 0.7, 0.7, 10));
 
                     if (cycle == 0) {
-                        CASES = false;
-                        if(distanceFront > 7.5){
                             if (pixelCase == 0) {
-                                points.add(new CurvePoint(STACK, 0.9, 0.9, 10));
-                                points.add(new CurvePoint(CROSS_BARRIER, 0.76, 0.76, 10));
                                 points.add(new CurvePoint(RIGHT_DEPOSIT, 0.63, 0.63, 10));
                             } else if (pixelCase == 1) {
-                                points.add(new CurvePoint(STACK, 0.9, 0.9, 10));
-                                points.add(new CurvePoint(CROSS_BARRIER, 0.76, 0.76, 10));
                                 points.add(new CurvePoint(MID_DEPOSIT, 0.63, 0.63, 10));
                             } else if (pixelCase == 2) {
-                                points.add(new CurvePoint(STACK, 0.9, 0.9, 10));
-                                points.add(new CurvePoint(CROSS_BARRIER, 0.76, 0.76, 10));
                                 points.add(new CurvePoint(LEFT_DEPOSIT, 0.63, 0.63, 10));
                             }
-                        } else {
-                            CASES = true;
-                        }
-                    } else if (cycle == 1 || cycle == 2) {
-                        CASES = false;
-                        if(distanceFront > 7.5){
+                        } else if (cycle == 1 || cycle == 2) {
                             if (pixelCase == 0) {
-                                points.add(new CurvePoint(STACK, 0.9, 0.9, 10));
-                                points.add(new CurvePoint(CROSS_BARRIER, 0.76, 0.76, 10));
-                                points.add(new CurvePoint(MID_DEPOSIT, 0.63, 0.63, 10));
+                                points.add(new CurvePoint(EXTRA_MID, 0.63, 0.63, 10));
                             } else if (pixelCase == 1) {
-                                points.add(new CurvePoint(STACK, 0.9, 0.9, 10));
-                                points.add(new CurvePoint(CROSS_BARRIER, 0.76, 0.76, 10));
-                                points.add(new CurvePoint(RIGHT_DEPOSIT, 0.63, 0.63, 10));
+                                points.add(new CurvePoint(EXTRA_RIGHT, 0.63, 0.63, 10));
                             } else if (pixelCase == 2) {
-                                points.add(new CurvePoint(STACK, 0.9, 0.9, 10));
-                                points.add(new CurvePoint(CROSS_BARRIER, 0.76, 0.76, 10));
-                                points.add(new CurvePoint(RIGHT_DEPOSIT, 0.63, 0.63, 10));
+                                points.add(new CurvePoint(EXTRA_RIGHT, 0.63, 0.63, 10));
                             }
-
-                        } else {
-                            CASES = true;
                         }
-                    }
 
-                    if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 60) {
-                        robot.intake.stop();
-                        robot.intake.drop();
-                        robot.v4b.flapOpen();
-                    }
+                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 140) {
+                            robot.intake.stop();
+                            robot.v4b.flapOpen();
+                        }
+
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 190 && robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) > 140){
+                            robot.intake.outtakeDeposit();
+
+                        }
 
                     if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 170) {
-                        robot.v4b.armIn();
-                        if (secondTime.time() > 0.3 && secondTime.time() < 0.45) {
-                            robot.v4b.grab();
-                        } else if (secondTime.time() > 0.45 && secondTime.time() < 0.6) {
-                            robot.v4b.open();
-                        } else if (secondTime.time() > 0.6) {
-                            robot.v4b.grab();
+                            robot.v4b.armIn();
+                            if (secondTime.time() > 0.3 && secondTime.time() < 0.45) {
+                                robot.v4b.grab();
+                            } else if (secondTime.time() > 0.45 && secondTime.time() < 0.6) {
+                                robot.v4b.open();
+                            } else if (secondTime.time() > 0.6) {
+                                robot.v4b.grab();
+                            }
+                        } else {
+                            secondTime.reset();
                         }
-                    } else {
-                        secondTime.reset();
-                    }
 
-                    if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 47) {
-                        secondTime.reset();
-                        robot.v4b.armOut();
-                        if (cycle == 0) {
-                            robot.slides.setPosition(350);
-                        } else if (cycle == 1) {
-                            robot.slides.setPosition(530);
-                        } else if (cycle == 2) {
-                            robot.slides.setPosition(700);
+                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 47) {
+                            secondTime.reset();
+                            robot.v4b.armOut();
+                            if (cycle == 0) {
+                                robot.slides.setPosition(160);
+                            } else if (cycle == 1) {
+                                robot.slides.setPosition(225);
+                            } else if (cycle == 2) {
+                                robot.slides.setPosition(225);
+                            }
+                            if (time.time() > 1.0) {
+                                newState(State.DEPOSIT);
+                            }
+                        } else {
+                            time.reset();
+                            secondTime.reset();
                         }
-                    } else {
-                        robot.intake.outtakeDeposit();
-                        time.reset();
-                        secondTime.reset();
-                    }
-
-                    if(CASES){
-                        newState(State.DEPOSIT);
-                    }
 
                     break;
 
                 case DEPOSIT:
-
+                    PPIND = true;
+                    gtp = false;
                     //points.add(new CurvePoint(DEPOSIT_MID,0.65,0.65,10));
 
                     if (cycle == 0) {
-                        robot.slides.setPosition(350);
+                        robot.slides.setPosition(160);
                     } else if (cycle == 1) {
-                        robot.slides.setPosition(530);
+                        robot.slides.setPosition(225);
                     } else if (cycle == 2) {
-                        robot.slides.setPosition(700);
+                        robot.slides.setPosition(225);
                     }
 
                     if(cycle == 0){
@@ -523,28 +559,28 @@ public class BlueFar extends LinearOpMode {
                                 newState(State.FINISH);
                             }
                         } else if (pixelCase == 1) {
-                            if (time.time() <= 1) {
+                            if (secondTime.time() <= 0.3) {
                                 robot.v4b.armOut();
-                            } else if (time.time() > 1 && time.time() < 1.3) {
-                                robot.v4b.horitzontalRight();
-                            } else if (time.time() > 1.3 && time.time() < 1.5) {
+                            } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
+                                robot.v4b.horizontalLeft();
+                            } else if (secondTime.time() > 1 && secondTime.time() < 1.2) {
                                 robot.v4b.openDepositTestHorizontal();
-                            } else if (time.time() > 1.5 && time.time() < 1.7) {
+                            } else if (secondTime.time() > 1.2 && secondTime.time() < 1.4) {
                                 robot.v4b.vertical();
-                            } else if (time.time() > 1.7) {
+                            } else if (secondTime.time() > 1.4) {
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
                         } else if (pixelCase == 2) {
-                            if (time.time() <= 1) {
+                            if (secondTime.time() <= 0.3) {
                                 robot.v4b.armOut();
-                            } else if (time.time() > 1 && time.time() < 1.3) {
+                            } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
                                 robot.v4b.horizontalLeft();
-                            } else if (time.time() > 1.3 && time.time() < 1.5) {
+                            } else if (secondTime.time() > 1 && secondTime.time() < 1.2) {
                                 robot.v4b.openDepositTestHorizontal();
-                            } else if (time.time() > 1.5 && time.time() < 1.7) {
+                            } else if (secondTime.time() > 1.2 && secondTime.time() < 1.4) {
                                 robot.v4b.vertical();
-                            } else if (time.time() > 1.7) {
+                            } else if (secondTime.time() > 1.4) {
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
@@ -552,11 +588,11 @@ public class BlueFar extends LinearOpMode {
 
                     } else {
 
-                        if (time.time() <= 0.3) {
+                        if (secondTime.time() <= 0.3) {
                             robot.v4b.armOut();
-                        } else if (time.time() > 0.65 && time.time() < 0.85) {
+                        } else if (secondTime.time() > 0.65 && secondTime.time() < 0.85) {
                             robot.v4b.openDepositTest();
-                        } else if (time.time() > 0.85) {
+                        } else if (secondTime.time() > 0.85) {
                             robot.v4b.armIn();
                             newState(State.FINISH);
                         }
@@ -566,42 +602,15 @@ public class BlueFar extends LinearOpMode {
                     break;
 
                 case FINISH:
+                    PPIND = true;
+                    gtp = false;
                     if (robot.slides.touchSensor.isPressed()) {
                         robot.slides.setPower(0.0);
                     } else {
                         robot.slides.setPower(-0.7);
                     }
-                    /*
-                    if(pixelCase == 0){
-                        points.add(new CurvePoint(RIGHT_DEPOSIT,1.0,1.0,10));
-                    } else if (pixelCase == 1){
-                        points.add(new CurvePoint(MID_DEPOSIT,0.4,0.4,10));
-                    } else {
-                        points.add(new CurvePoint(LEFT_DEPOSIT,1.0,1.0,10));
-                    }
 
-                     */
-
-                    if(cycle == 0) {
-                        if (pixelCase == 0) {
-                            points.add(new CurvePoint(PARK_RIGHT, 0.7, 0.7, 10));
-                        } else if (pixelCase == 1) {
-                            points.add(new CurvePoint(PARK_MID, 0.8, 0.8, 10));
-                        } else {
-                            points.add(new CurvePoint(PARK_LEFT, 0.8, 0.8, 10));
-                        }
-                    } else {
-                        if (pixelCase == 0) {
-                            points.add(new CurvePoint(PARK_MID, 0.7, 0.7, 10));
-                        } else if (pixelCase == 1) {
-                            points.add(new CurvePoint(PARK_RIGHT, 0.8, 0.8, 10));
-                        } else {
-                            points.add(new CurvePoint(PARK_RIGHT, 0.8, 0.8, 10));
-                        }
-                    }
-
-
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3){
+                    if(true){
                         cycle += 1;
 
                         if(cycle == 1 || cycle == 2){
@@ -609,9 +618,6 @@ public class BlueFar extends LinearOpMode {
                         } else {
                             newState(State.IDLE);
                         }
-                    }
-                    else {
-                        time.reset();
                     }
                     break;
 
@@ -624,43 +630,45 @@ public class BlueFar extends LinearOpMode {
 
                     PPIND = true;
                     gtp = false;
-                    /*
                     if(cycle == 1){
-                        pos = 0.48;
+                        pos = 0.55;
                     } else if (cycle == 2){
-                        pos = 0.6   ;
+                        pos = 0.6;
                     }
-
-                     */
                     robot.intake.intake_dropper.setPosition(pos);
                     robot.v4b.armMid();
                     robot.v4b.open();
 
                     if(cycle == 1) {
                         if (pixelCase == 0) {
-                            points.add(new CurvePoint(PARK_RIGHT, 0.7, 0.7, 10));
+                            points.add(new CurvePoint(RIGHT_DEPOSIT, 0.7, 0.7, 10));
                         } else if (pixelCase == 1) {
-                            points.add(new CurvePoint(PARK_MID, 0.8, 0.8, 10));
+                            points.add(new CurvePoint(MID_DEPOSIT, 0.8, 0.8, 10));
                         } else {
-                            points.add(new CurvePoint(PARK_LEFT, 0.8, 0.8, 10));
+                            points.add(new CurvePoint(LEFT_DEPOSIT, 0.8, 0.8, 10));
                         }
                     } else if(cycle == 2){
                         if (pixelCase == 0) {
-                            points.add(new CurvePoint(PARK_MID, 0.7, 0.7, 10));
+                            points.add(new CurvePoint(EXTRA_MID, 0.7, 0.7, 10));
                         } else if (pixelCase == 1) {
-                            points.add(new CurvePoint(PARK_RIGHT, 0.8, 0.8, 10));
+                            points.add(new CurvePoint(EXTRA_RIGHT, 0.8, 0.8, 10));
                         } else {
-                            points.add(new CurvePoint(PARK_RIGHT, 0.8, 0.8, 10));
+                            points.add(new CurvePoint(EXTRA_RIGHT, 0.8, 0.8, 10));
                         }
                     }
+
 
                     if(cycle == 1){
                         points.add(new CurvePoint(CROSS_BARRIER,0.7,0.85,10));
                     } else if (cycle == 2){
-                        points.add(new CurvePoint(CROSS_BARRIER_2,0.7,0.85,10));
+                        points.add(new CurvePoint(CROSS_BARRIER,0.7,0.85,10));
                     }
 
                     points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.7,0.85,10));
+
+                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 50){
+                        robot.intake.intakeSet(1.0);
+                    }
 
 
                     if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3){
@@ -672,6 +680,9 @@ public class BlueFar extends LinearOpMode {
                     break;
 
                 case RETURNSTACK:
+                    PPIND = true;
+                    gtp = false;
+                    robot.intake.intakeSet(0.9);
                     robot.intake.intake_dropper.setPosition(pos);
                     if(cycle == 1){
                         points.add(new CurvePoint(CROSS_BARRIER,0.7,0.85,10));
@@ -681,7 +692,7 @@ public class BlueFar extends LinearOpMode {
                     points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.7,0.85,10));
 
 
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 8){
+                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3){
                         newState(State.STACK);
                     }
                     else {
@@ -742,8 +753,6 @@ public class BlueFar extends LinearOpMode {
             //telemetry.addData("Touch Sensor", robot.slides.isDown());
             telemetry.addData("Buffer Heading", Math.toDegrees(bufferHeading));
             telemetry.addData("FollowMe", RobotMovement.getLastFollowMe());
-            telemetry.addData("StackCheck", stackPosition);
-
             telemetry.update();
         }
     }
@@ -770,7 +779,7 @@ public class BlueFar extends LinearOpMode {
 }
 
 @Config
-class BlueFarPath{
+class BlueFarPathSensor{
     //Set the set/start position of the servo in dashboard
     public static double value = 0;
 }

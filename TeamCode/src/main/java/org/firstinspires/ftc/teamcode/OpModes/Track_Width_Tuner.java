@@ -13,6 +13,10 @@ import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 public class Track_Width_Tuner extends LinearOpMode {
     double maxTurn = 0.3;
     double maxMove = 1;
+
+    double y = 0;
+
+    double prevy = 0;
     Robot robot = null;
     boolean running = false;
     boolean running2 = false;
@@ -34,6 +38,11 @@ public class Track_Width_Tuner extends LinearOpMode {
 
         while (opModeIsActive())
         {
+
+            y = robot.localizer.getPose().getY();
+            double dy = y - prevy;
+            prevy= y;
+
             if(gamepad1ex.isPress(GamepadEx.Control.a)){
                 running = !running;
             }
@@ -73,6 +82,8 @@ public class Track_Width_Tuner extends LinearOpMode {
             telemetry.addData("Difference X", Math.abs(robot.getRawRight_X_Dist() + robot.getRawLeft_X_Dist()));
             telemetry.addData("Difference Y", Math.abs(robot.getRawRight_Y_Dist() - robot.getRawLeft_Y_Dist()));
             telemetry.addData("Sum Y", robot.getRawRight_Y_Dist() + robot.getRawLeft_Y_Dist());
+            telemetry.addData("DY", dy);
+
 
             telemetry.update();
             FtcDashboard.getInstance().sendTelemetryPacket(packet);

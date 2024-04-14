@@ -25,8 +25,8 @@ import org.firstinspires.ftc.teamcode.PurePursuit.RobotMovement;
 import java.util.ArrayList;
 
 
-@Autonomous(name="BlueFar")
-public class BlueFar extends LinearOpMode {
+@Autonomous(name="RedFar")
+public class RedFar extends LinearOpMode {
 
 
     private enum State {
@@ -69,65 +69,65 @@ public class BlueFar extends LinearOpMode {
 
 
     //First Position (Center of Tile of the Three Pieces of Tape)
-    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(5, 53, Math.toRadians(90));
+    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(-5, 53, Math.toRadians(90));
 
-    public Pose2d STACK = new Pose2d(18, 53.75, Math.toRadians(90));
+    public Pose2d STACK = new Pose2d(-18, 53.75, Math.toRadians(90));
 
-    public Pose2d STACK_2 = new Pose2d(21.5, 54.9, Math.toRadians(90));
+    public Pose2d STACK_2 = new Pose2d(-21.5, 54.9, Math.toRadians(90));
 
     ;
 
-    public Pose2d CROSS_BARRIER = new Pose2d(-50, 56, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER = new Pose2d(50, 56, Math.toRadians(90));
 
-    public Pose2d CROSS_BARRIER_2 = new Pose2d(-50, 62, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER_2 = new Pose2d(50, 62, Math.toRadians(90));
 
 
 
-    public Pose2d RIGHT_PLACEMENT_FORWARD = new Pose2d(-5, 25, Math.toRadians(0));
+    public Pose2d RIGHT_PLACEMENT_FORWARD = new Pose2d(5, 25, Math.toRadians(0));
 
     public Pose2d RIGHT_PLACEMENT_FORWARDUP = new Pose2d(0, 41, Math.toRadians(0));
 
-    public Pose2d RIGHTPLACEMENTSTRAFE = new Pose2d(9.3, 34, Math.toRadians(0));
+    public Pose2d RIGHTPLACEMENTSTRAFE = new Pose2d(-9.3, 34, Math.toRadians(0));
 
 
-    public Pose2d MID_OUT = new Pose2d(-4.4, 52, Math.toRadians(0));
+    public Pose2d MID_OUT = new Pose2d(4.4, 52, Math.toRadians(0));
 
-    public Pose2d MID_PLACEMENT = new Pose2d(0.1, 46, Math.toRadians(0));
+    public Pose2d MID_PLACEMENT = new Pose2d(-0.1, 46, Math.toRadians(0));
 
 
 
     //Left Sequence
 
-    public Pose2d LEFT_POS1 = new Pose2d(0.2, 24, Math.toRadians(0));
-    public Pose2d LEFT_POS2TURN = new Pose2d(-0.1, 25.3, Math.toRadians(115));
-    public Pose2d LEFT_POS3 = new Pose2d(-7, 26, Math.toRadians(115));
+    public Pose2d LEFT_POS1 = new Pose2d(-0.2, 24, Math.toRadians(0));
+    public Pose2d LEFT_POS2TURN = new Pose2d(0.1, 25.3, Math.toRadians(115));
+    public Pose2d LEFT_POS3 = new Pose2d(7, 26, Math.toRadians(115));
 
-    public Pose2d LEFT_POS4 = new Pose2d(0.1, 26.1, Math.toRadians(90));
+    public Pose2d LEFT_POS4 = new Pose2d(-0.1, 26.1, Math.toRadians(90));
 
 
 
 
     //Middle Position Before Deposit
-    public Pose2d DEPOSIT_MID = new Pose2d(-68, 27, Math.toRadians(90));
+    public Pose2d DEPOSIT_MID = new Pose2d(68, 27, Math.toRadians(90));
 
 
-    public Pose2d LEFT_DEPOSIT = new Pose2d(-89, 19, Math.toRadians(90));
+    public Pose2d LEFT_DEPOSIT = new Pose2d(89, 19, Math.toRadians(90));
 
 
     //Actual Middle Deposit
-    public Pose2d MID_DEPOSIT =  new Pose2d(-89, 14, Math.toRadians(90));
+    public Pose2d MID_DEPOSIT =  new Pose2d(89, 14, Math.toRadians(90));
 
 
-    public Pose2d RIGHT_DEPOSIT =  new Pose2d(-89, 25.2, Math.toRadians(90));
+    public Pose2d RIGHT_DEPOSIT =  new Pose2d(89, 25.2, Math.toRadians(90));
 
 
-    public Pose2d PARK_RIGHT =  new Pose2d(-82.8, 25.2, Math.toRadians(90));
+    public Pose2d PARK_RIGHT =  new Pose2d(82.8, 25.2, Math.toRadians(90));
 
-    public Pose2d PARK_MID =  new Pose2d(-83.75, 14, Math.toRadians(90));
+    public Pose2d PARK_MID =  new Pose2d(83.75, 14, Math.toRadians(90));
 
-    public Pose2d PARK_LEFT =  new Pose2d(-83, 19, Math.toRadians(90));
+    public Pose2d PARK_LEFT =  new Pose2d(83, 19, Math.toRadians(90));
 
-    public Pose2d FINAL_PARK =  new Pose2d(-83, 29, Math.toRadians(90));
+    public Pose2d FINAL_PARK =  new Pose2d(83, 29, Math.toRadians(90));
 
 
 
@@ -204,7 +204,7 @@ public class BlueFar extends LinearOpMode {
             try {
                 pixelCase = robot.blueGetFarPixelCase();
             } catch(Exception e){
-                pixelCase = BlueFarPath.value;
+                pixelCase = RedFarPath.value;
             }
             pos = 0.39;
             telemetry.addData("Case", pixelCase);
@@ -279,7 +279,7 @@ public class BlueFar extends LinearOpMode {
                     }
 
                     if(pixelCase == 2){
-                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                             newState(State.LEFT_BACK);
                         } else {
                             time.reset();
@@ -291,7 +291,7 @@ public class BlueFar extends LinearOpMode {
                             time.reset();
                         }
                     } else {
-                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                             newState(State.STACK);
                         } else {
                             time.reset();
@@ -341,7 +341,7 @@ public class BlueFar extends LinearOpMode {
                     points.add(new CurvePoint(MID_OUT,0.8,0.8,10));
                     points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.8,0.8,10));
 
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
+                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                         newState(State.STACK);
                     } else {
                         time.reset();
@@ -353,47 +353,47 @@ public class BlueFar extends LinearOpMode {
                     robot.v4b.open();
 
                     if(cycle == 1) {
-                            points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.62, 0.62, 10));
-                            points.add(new CurvePoint(STACK_2, 0.35, 0.35, 10));
+                        points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.62, 0.62, 10));
+                        points.add(new CurvePoint(STACK_2, 0.35, 0.35, 10));
                     } else if (cycle == 2){
-                            points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.62, 0.62, 10));
-                            points.add(new CurvePoint(STACK_2, 0.35, 0.35, 10));
+                        points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.62, 0.62, 10));
+                        points.add(new CurvePoint(STACK_2, 0.35, 0.35, 10));
 
                     } else {
-                            points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.62, 0.62,10));
-                            points.add(new CurvePoint(STACK, 0.5, 0.5, 10));
+                        points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.62, 0.62,10));
+                        points.add(new CurvePoint(STACK, 0.5, 0.5, 10));
                     }
 
-                        if (cycle == 1 || cycle == 2) {
-                            robot.intake.intake_dropper.setPosition(0.9);
-                            if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
-                                if (time.time() > 0.8) {
-                                    if (time.time() > 0.5 && time.time() < 2.0) {
-                                        robot.intake.intake_dropper.setPosition(0.65);
-                                        newState(State.BARRIER_CROSS);
-                                    } else {
-                                        robot.intake.intakeSet(1.0);
-                                    }
+                    if (cycle == 1 || cycle == 2) {
+                        robot.intake.intake_dropper.setPosition(0.9);
+                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
+                            if (time.time() > 0.8) {
+                                if (time.time() > 0.5 && time.time() < 2.0) {
+                                    robot.intake.intake_dropper.setPosition(0.65);
+                                    newState(State.BARRIER_CROSS);
+                                } else {
+                                    robot.intake.intakeSet(1.0);
                                 }
-                            } else {
-                                time.reset();
                             }
                         } else {
-                            if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
-                                pos += 0.001;
-                                robot.intake.intake_dropper.setPosition(pos);
-                                robot.intake.intakeSet(1.0);
-                                if (time.time() > 2 && time.time() < 4) {
-                                    robot.intake.intake_dropper.setPosition(0.65);
-                                } else if(time.time() > 4){
-                                    newState(State.BARRIER_CROSS);
-                                }
-                            } else {
-                                time.reset();
-                                robot.intake.intake_dropper.setPosition(pos);
-                            }
+                            time.reset();
                         }
-                        break;
+                    } else {
+                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
+                            pos += 0.001;
+                            robot.intake.intake_dropper.setPosition(pos);
+                            robot.intake.intakeSet(1.0);
+                            if (time.time() > 2 && time.time() < 4) {
+                                robot.intake.intake_dropper.setPosition(0.65);
+                            } else if(time.time() > 4){
+                                newState(State.BARRIER_CROSS);
+                            }
+                        } else {
+                            time.reset();
+                            robot.intake.intake_dropper.setPosition(pos);
+                        }
+                    }
+                    break;
 
                 case BARRIER_CROSS:
                     boolean CASES = false;
@@ -770,7 +770,7 @@ public class BlueFar extends LinearOpMode {
 }
 
 @Config
-class BlueFarPath{
+class RedFarPath{
     //Set the set/start position of the servo in dashboard
     public static double value = 0;
 }

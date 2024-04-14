@@ -9,11 +9,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Odometry.S4T_Encoder;
 import org.firstinspires.ftc.teamcode.Odometry.S4T_Localizer;
-import org.firstinspires.ftc.teamcode.Odometry.S4T_Localizer_3;
-import org.firstinspires.ftc.teamcode.OpModes.LinearTeleOp;
-import org.firstinspires.ftc.teamcode.Vision.PixelDetector;
-import org.firstinspires.ftc.teamcode.Vision.SleeveDetectorV2;
-import org.firstinspires.ftc.teamcode.Vision.pixels;
+import org.firstinspires.ftc.teamcode.Vision.pixelsBlueClose;
+import org.firstinspires.ftc.teamcode.Vision.pixelsBlueFar;
+import org.firstinspires.ftc.teamcode.Vision.pixelsRedClose;
+import org.firstinspires.ftc.teamcode.Vision.pixelsRedFar;
 import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -22,11 +21,14 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.List;
 
-public class Robot {
+public class   Robot {
 
     public Mecanum_Drive drive;
 
     public boolean robotCentric = false;
+
+    public boolean driveToggle = true;
+
     public Intake intake;
 
     public Airplane plane;
@@ -47,8 +49,6 @@ public class Robot {
 
     OpenCvCamera webcam;
     OpenCvPipeline detector;
-
-
     private HardwareMap hardwareMap;
 
     private Telemetry telemetry;
@@ -88,7 +88,23 @@ public class Robot {
     public void operate(GamepadEx gamepad1ex, GamepadEx gamepad2ex) {
         telemetry.addLine("MAKE SURE TO HIT RIGHT TRIGGER");
 
-        drive.drive(gamepad1ex.gamepad,1,0.7);
+
+
+
+        if(gamepad2ex.isPress(GamepadEx.Control.start)){
+            driveToggle = !driveToggle;
+        }
+
+        if(driveToggle){
+            drive.drive(gamepad1ex.gamepad, 1.0, 0.6);
+        } else {
+            if(V4B_Arm.grabberToggle == 2){
+                drive.driveCentric(gamepad1ex.gamepad, 1, 0.5, getPos().getHeading());
+            } else {
+                drive.driveCentric(gamepad1ex.gamepad, 1, 0.7, getPos().getHeading());
+            }
+        }
+
 
         drive.write();
 
@@ -116,19 +132,18 @@ public class Robot {
 
         if(gamepad1ex.isPress(GamepadEx.Control.start)){
             telemetry.addLine("Resetting...");
-            localizer.reset();
+            resetOdo();
         }else{
+            updatePos();
             update();
         }
 
-
-
     }
-    public void initializeWebcam(){
+    public void redCloseInitializeWebcam(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        detector = new pixels();
+        detector = new pixelsRedClose();
         webcam.setPipeline(detector);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -147,10 +162,90 @@ public class Robot {
         });
     }
 
-    public double getPixelCase(){
-        return((pixels)detector).getPixelPosition();
+    public void redFarInitializeWebcam(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        detector = new pixelsRedFar();
+        webcam.setPipeline(detector);
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                FtcDashboard.getInstance().startCameraStream(webcam, 30);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
     }
 
+    public void blueCloseInitializeWebcam(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        detector = new pixelsBlueClose();
+        webcam.setPipeline(detector);
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                FtcDashboard.getInstance().startCameraStream(webcam, 30);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
+    public void blueFarInitiailzeWebcam(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        detector = new pixelsBlueFar();
+        webcam.setPipeline(detector);
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                FtcDashboard.getInstance().startCameraStream(webcam, 30);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
+    public double redGetClosePixelCase(){
+        return((pixelsRedClose)detector).getPixelPosition();
+    }
+
+    public double redGetFarPixelCase(){
+        return((pixelsRedFar)detector).getPixelPosition();
+    }
+
+    public double blueGetClosePixelCase(){
+        return((pixelsBlueClose)detector).getPixelPosition();
+    }
+
+    public double blueGetFarPixelCase(){
+        return((pixelsBlueFar)detector).getPixelPosition();
+    }
 
 
     public void stopWebcam(){
@@ -175,11 +270,11 @@ public class Robot {
     }
 
     public double getRawLeft_Y_Dist(){
-        return -encoderLY.distance;
+        return encoderLY.distance;
     }
 
     public double getRawRight_Y_Dist(){
-        return -encoderRY.distance;
+        return encoderRY.distance;
     }
 
 
@@ -257,6 +352,5 @@ public class Robot {
 
 
 }
-
 
 

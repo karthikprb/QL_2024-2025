@@ -13,7 +13,7 @@ public class SleeveTester extends OpMode {
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
 
-        robot.initializeWebcam();
+        robot.redCloseInitializeWebcam();
 
 
     }

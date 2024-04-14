@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Components;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -24,7 +25,8 @@ public class Intake {
 
      */
 
-    private double pos = .18;
+
+    private double intakeHeight = 0.0;
     ElapsedTime time;
     Telemetry telemetry;
 
@@ -35,27 +37,27 @@ public class Intake {
         intake = new Caching_Motor(map, "intake");
         intake_dropper = new Caching_Servo(map, "intake_dropper");
         this.telemetry = telemetry;
-
         intake.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         time = new ElapsedTime();
         time.startTime();
-
+        lift();
+        write();
     }
 
     public void intakeSet(double power){
         intake.setPower(power);
     }
 
-   /* public void drop() {
-        intake_dropper.setPosition(.1);
+   public void drop() {
+        intake_dropper.setPosition(0.92);
     }
     public void lift(){
-        intake_dropper.setPosition(0.68);
+        intake_dropper.setPosition(0);
     }
 
-    */
+
     public void outtakeDeposit(){
-        intake.setPower(-.4);
+        intake.setPower(-0.75);
     }
 
     public void stop(){
@@ -63,6 +65,15 @@ public class Intake {
     }
 
     public void intake(GamepadEx gamepadEx, GamepadEx gamepad2Ex, Telemetry telemetry){
+
+
+        if(Slides.hangToggle == true){
+            lift();
+            intakeHeight = 7;
+        }
+
+
+
         if(gamepadEx.isPress(GamepadEx.Control.right_bumper)){
             intakeToggle = !intakeToggle;
         }
@@ -71,18 +82,48 @@ public class Intake {
             intakeToggle = false;
         }
 
-        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_up)){
-            pos+=.01;
+        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
+            if(intakeHeight > 0) {
+                intakeHeight -= 1;
+            }
         }
-        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_down)){
-            pos-=.01;
+        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_right)){
+            if(intakeHeight < 5) {
+                intakeHeight += 1;
+            }
         }
 
-        intake_dropper.setPosition(pos);
+        if(intakeHeight == 0){
+            intake_dropper.setPosition(0.9);
+        } else if (intakeHeight == 1){
+            intake_dropper.setPosition(0.9);
+        } else if(intakeHeight == 2){
+            intake_dropper.setPosition(0.7);
+        }else if(intakeHeight == 3){
+            intake_dropper.setPosition(0.62);
+        } else if(intakeHeight == 4){
+            intake_dropper.setPosition(0.54);
+        } else if(intakeHeight == 5){
+            intake_dropper.setPosition(0.43);
+        }
 
         if(intakeToggle){
-            intake.setPower(1);
-        }if(!intakeToggle) {
+            if(intakeHeight == 0){
+                intake.setPower(1.0);
+            } else if (intakeHeight == 1){
+                intake.setPower(1.0);
+            } else if(intakeHeight == 2){
+                intake.setPower(1.0);
+            }else if(intakeHeight == 3){
+                intake.setPower(1.0);
+            } else if(intakeHeight == 4){
+                intake.setPower(1.0);
+            } else if(intakeHeight == 5){
+                intake.setPower(1.0);
+            }
+        }
+
+        if(!intakeToggle) {
             intake.setPower(-gamepadEx.gamepad.right_trigger);
         }
 

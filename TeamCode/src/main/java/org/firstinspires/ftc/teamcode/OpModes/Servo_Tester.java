@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 @TeleOp
 public class Servo_Tester extends LinearOpMode {
     //Set the hardware mapping name of the servo
-    final String name = "leftgrab";
-    final String name2 = "rightgrab";
+    final String name = ServoTester.servoName;
+    final String name2 = ServoTester.servoTwoName;
     Caching_Servo servo;
     Caching_Servo servo2;
 
@@ -61,4 +61,8 @@ class ServoTester{
     //Set the set/start position of the servo in dashboard
     public static double pos = 0;
     public static double pos2 = 1;
+
+    public static String servoName = "wrist";
+
+    public static String servoTwoName = "wrist";
 }

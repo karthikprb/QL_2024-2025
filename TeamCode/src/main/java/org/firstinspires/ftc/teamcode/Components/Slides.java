@@ -38,7 +38,7 @@ public class Slides {
 
 
     public static double pos;
-    public static double height;
+    public static double heights;
     public PIDFController controller;
 
     Telemetry telemetry;
@@ -48,7 +48,7 @@ public class Slides {
 
     boolean manualOperateToggle = true;
 
-    boolean hangToggle = false;
+    public static boolean hangToggle = false;
 
     public TouchSensor touchSensor;
 
@@ -74,7 +74,9 @@ public class Slides {
         secondTime =new ElapsedTime();
         secondTime.startTime();
         time.startTime();
+        hangToggle = false;
         setBrake();
+        heights = 1;
     }
 
     public void write(){
@@ -143,12 +145,52 @@ public class Slides {
                         mRobotState = STATE.MANUAL;
                     } else {
                         if (V4B_Arm.grabberToggle == 2 || V4B_Arm.grabberToggle == 3) {
-                            setPosition(400);
+                            if(heights == 1){
+                                if(V4B_Arm.wristCase == 3 || V4B_Arm.wristCase == 4){
+                                    setPosition(235);  //HORIZONTAL FIRST
+                                } else {
+                                    setPosition(302); //VERTICAL FIRST
+                                }
+                            } else if(heights == 2){
+                                if(V4B_Arm.wristCase == 3 || V4B_Arm.wristCase == 4){
+                                    setPosition(375);  //HORIZONTAL SECOND
+                                } else {
+                                    setPosition(485); //VERTICAL SECOND
+                                }
+                            } else if (heights == 3){
+                                if(V4B_Arm.wristCase == 3 || V4B_Arm.wristCase == 4){
+                                    setPosition(525);  //HORIZONTAL THIRD
+                                } else {
+                                    setPosition(590); //VERTICAL THIRD
+                                }
+                            } else if(heights == 4){
+                                if(V4B_Arm.wristCase == 3 || V4B_Arm.wristCase == 4){
+                                    setPosition(640);  //HORIZONTAL FOURTH
+                                } else {
+                                    setPosition(722); //VERTICAL FOURTH
+                                }
+                            } else if(heights == 5){
+                                if(V4B_Arm.wristCase == 3 || V4B_Arm.wristCase == 4){
+                                    setPosition(792);  //HORIZONTAL FIFTH
+                                } else {
+                                    setPosition(867); //VERTICAL FIFTH
+                                }
+                            } else if(heights == 6){
+                                if(V4B_Arm.wristCase == 3 || V4B_Arm.wristCase == 4){
+                                    setPosition(910);  //HORIZONTAL SIXTH
+                                } else {
+                                    setPosition(1136); //VERTICAL SIXTH
+                                }
+                            }
+
                         } else {
                             if (touchSensor.isPressed()) {
                                 setPower(0.0);
+                                reset();
                             } else {
-                                setPower(-0.7);
+                                if(time.time() > 0.25){
+                                    setPower(-0.7);
+                                }
                             }
                         }
                     }
@@ -224,24 +266,45 @@ public class Slides {
             manualOperateToggle = !manualOperateToggle;
         }
 
-        if (gamepad1.isPress(GamepadEx.Control.left_bumper) || gamepad2.isPress(GamepadEx.Control.left_bumper)){
+        if (gamepad1.isPress(GamepadEx.Control.left_bumper)){
             time.reset();
+        }
+
+        if(gamepad2.isPress(GamepadEx.Control.left_bumper)){
+            if(heights > 1){
+                heights -= 1;
+            } else {
+                heights = 1;
+            }
+        }
+
+        if (gamepad2.isPress(GamepadEx.Control.y)){
+            reset();
+        }
+
+        if(gamepad2.isPress(GamepadEx.Control.right_bumper)){
+            if(heights < 6){
+                heights += 1;
+            } else {
+                heights = 6;
+            }
         }
 
 
 
         telemetry.addData("Slide Position: ", getPosition());
-        telemetry.addData("Left", lSlide.motor.getCurrentPosition());
-        telemetry.addData("Right", rSlide.motor.getCurrentPosition());
-        telemetry.addData("slides pos",sum);
-        telemetry.addData("Right Slide Power: ", rSlide.motor.getPower());
-        telemetry.addData("Left Slide Power: ", lSlide.motor.getPower());
-        telemetry.addData("Right Stick", gamepad2.gamepad.left_stick_y);
+        //telemetry.addData("Left", lSlide.motor.getCurrentPosition());
+        //telemetry.addData("Right", rSlide.motor.getCurrentPosition());
+        //telemetry.addData("slides pos",sum);
+        //telemetry.addData("Right Slide Power: ", rSlide.motor.getPower());
+        //telemetry.addData("Left Slide Power: ", lSlide.motor.getPower());
+        //telemetry.addData("Right Stick", gamepad2.gamepad.left_stick_y);
         telemetry.addData("Touch Sensor", touchSensor.isPressed());
-        telemetry.addData("Touch Value", touchSensor.getValue());
+        //telemetry.addData("Touch Value", touchSensor.getValue());
         telemetry.addData("Case", mRobotState);
         telemetry.addData("GrabberToggle", V4B_Arm.grabberToggle);
         telemetry.addData("HangToggle", hangToggle);
-        telemetry.addData("Time", time);
+        telemetry.addData("Height", heights);
+        //telemetry.addData("Time", time);
     }
 }
