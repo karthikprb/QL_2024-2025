@@ -1,30 +1,24 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 
-
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Components.Robot;
 import org.firstinspires.ftc.teamcode.PurePursuit.CurvePoint;
 import org.firstinspires.ftc.teamcode.PurePursuit.RobotMovement;
 
-
 import java.util.ArrayList;
 
 
-@Autonomous(name="BlueFarSensorTest")
-public class BlueFarSensorTest extends LinearOpMode {
+@Autonomous(name="RedFarSensorTest")
+public class RedFarSensorTest extends LinearOpMode {
 
 
     private enum State {
@@ -67,85 +61,85 @@ public class BlueFarSensorTest extends LinearOpMode {
 
 
     //First Position (Center of Tile of the Three Pieces of Tape)
-    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(5, 50.5, Math.toRadians(90));
+    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(-5, 50.5, Math.toRadians(270));
 
-    public Pose2d STRAFE_BARRIER_RIGHT_2 = new Pose2d(5,55,Math.toRadians(90));
+    public Pose2d STRAFE_BARRIER_RIGHT_2 = new Pose2d(-5,55,Math.toRadians(270));
 
-    public Pose2d STACK = new Pose2d(20.7, 51, Math.toRadians(90));
+    public Pose2d STACK = new Pose2d(-20.7, 51, Math.toRadians(270));
 
-    public Pose2d STACK_2 = new Pose2d(21.1, 55, Math.toRadians(90));
+    public Pose2d STACK_2 = new Pose2d(-21.1, 55, Math.toRadians(270));
 
-    public Pose2d STACK_3 = new Pose2d(21.2, 49, Math.toRadians(90));
+    public Pose2d STACK_3 = new Pose2d(-21.2, 49, Math.toRadians(270));
 
 
     ;
 
-    public Pose2d CROSS_BARRIER = new Pose2d(-66, 55, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER = new Pose2d(66, 55, Math.toRadians(270));
 
-    public Pose2d CROSS_BARRIER_2 = new Pose2d(-59, 51, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER_2 = new Pose2d(59, 51, Math.toRadians(270));
 
-    public Pose2d EXTRAPOSITION_1 = new Pose2d(-70, 50, Math.toRadians(90));
-
-
-    public Pose2d EXTRABACKPOSITION_1 = new Pose2d(-65, 43, Math.toRadians(90));
-
-    public Pose2d EXTRAPOSITION_2 = new Pose2d(-80, 35, Math.toRadians(90));
+    public Pose2d EXTRAPOSITION_1 = new Pose2d(70, 50, Math.toRadians(270));
 
 
+    public Pose2d EXTRABACKPOSITION_1 = new Pose2d(65, 43, Math.toRadians(270));
 
-    public Pose2d RIGHT_PLACEMENT_FORWARD = new Pose2d(-5, 25, Math.toRadians(0));
+    public Pose2d EXTRAPOSITION_2 = new Pose2d(80, 35, Math.toRadians(270));
+
+
+
+    public Pose2d RIGHT_PLACEMENT_FORWARD = new Pose2d(5, 25, Math.toRadians(0));
 
     public Pose2d RIGHT_PLACEMENT_FORWARDUP = new Pose2d(0, 34, Math.toRadians(0));
 
-    public Pose2d RIGHTPLACEMENTSTRAFE = new Pose2d(9.3, 34, Math.toRadians(0));
+    public Pose2d RIGHTPLACEMENTSTRAFE = new Pose2d(-9.3, 34, Math.toRadians(0));
 
 
-    public Pose2d MID_OUT = new Pose2d(-4.4, 52, Math.toRadians(0));
+    public Pose2d MID_OUT = new Pose2d(4.4, 52, Math.toRadians(0));
 
-    public Pose2d MID_PLACEMENT = new Pose2d(0.1, 46, Math.toRadians(0));
+    public Pose2d MID_PLACEMENT = new Pose2d(-0.1, 46, Math.toRadians(0));
 
 
 
     //Left Sequence
 
-    public Pose2d LEFT_POS1 = new Pose2d(0.2, 24, Math.toRadians(0));
-    public Pose2d LEFT_POS2TURN = new Pose2d(-0.1, 25.3, Math.toRadians(115));
-    public Pose2d LEFT_POS3 = new Pose2d(-7, 26, Math.toRadians(115));
+    public Pose2d LEFT_POS1 = new Pose2d(-0.2, 24, Math.toRadians(0));
+    public Pose2d LEFT_POS2TURN = new Pose2d(0.1, 25.3, Math.toRadians(270-25));
+    public Pose2d LEFT_POS3 = new Pose2d(7, 26, Math.toRadians(270-25));
 
-    public Pose2d LEFT_POS4 = new Pose2d(0.1, 26.1, Math.toRadians(90));
+    public Pose2d LEFT_POS4 = new Pose2d(-0.1, 26.1, Math.toRadians(270));
 
 
 
 
     //Middle Position Before Deposit
-    public Pose2d DEPOSIT_MID = new Pose2d(-68, 27, Math.toRadians(90));
+    public Pose2d DEPOSIT_MID = new Pose2d(68, 27, Math.toRadians(270));
 
 
-    public Pose2d LEFT_DEPOSIT = new Pose2d(-90.9, 12.5, Math.toRadians(90));
+    public Pose2d LEFT_DEPOSIT = new Pose2d(90.9, 12.5, Math.toRadians(270));
 
 
     //Actual Middle Deposit
-    public Pose2d MID_DEPOSIT =  new Pose2d(-91, 18, Math.toRadians(90));
+    public Pose2d MID_DEPOSIT =  new Pose2d(91, 18, Math.toRadians(270));
 
 
-    public Pose2d EXTRA_MID =  new Pose2d(-91, 15, Math.toRadians(90));
+    public Pose2d EXTRA_MID =  new Pose2d(91, 15, Math.toRadians(270));
 
 
-    public Pose2d RIGHT_DEPOSIT =  new Pose2d(-90.4, 20, Math.toRadians(90));
+    public Pose2d RIGHT_DEPOSIT =  new Pose2d(90.4, 20, Math.toRadians(270));
 
-    public Pose2d EXTRA_RIGHT =  new Pose2d(-90, 21, Math.toRadians(90));
-
-
+    public Pose2d EXTRA_RIGHT =  new Pose2d(90, 21, Math.toRadians(270));
 
 
 
-    public Pose2d PARK_RIGHT =  new Pose2d(-82.8, 25.2, Math.toRadians(90));
 
-    public Pose2d PARK_MID =  new Pose2d(-83.75, 14, Math.toRadians(90));
 
-    public Pose2d PARK_LEFT =  new Pose2d(-83, 19, Math.toRadians(90));
+    public Pose2d PARK_RIGHT =  new Pose2d(82.8, 25.2, Math.toRadians(270));
 
-    public Pose2d FINAL_PARK =  new Pose2d(-83, 29, Math.toRadians(90));
+    public Pose2d PARK_MID =  new Pose2d(83.75, 14, Math.toRadians(270));
+
+    public Pose2d PARK_LEFT =  new Pose2d(83, 19, Math.toRadians(270));
+
+    public Pose2d FINAL_PARK =  new Pose2d(83, 29, Math.toRadians(270));
 
 
 
@@ -174,7 +168,7 @@ public class BlueFarSensorTest extends LinearOpMode {
 
     boolean distanceL;
     boolean distanceR;
-    double counter = 0;
+
     double distanceFront = 0;
 
     double distanceSide = 0;
@@ -196,8 +190,6 @@ public class BlueFarSensorTest extends LinearOpMode {
     ElapsedTime goTime;
 
     ElapsedTime testTime;
-
-    ElapsedTime runTime;
     NormalizedColorSensor colorSensor;
     Robot robot;
 
@@ -209,7 +201,6 @@ public class BlueFarSensorTest extends LinearOpMode {
         secondTime = new ElapsedTime();
         goTime = new ElapsedTime();
         testTime = new ElapsedTime();
-        runTime = new ElapsedTime();
         robot.setStartPose(new Pose2d(0, 0, 0));
         robot.stopAndResetEncoders();
 
@@ -231,7 +222,7 @@ public class BlueFarSensorTest extends LinearOpMode {
             } catch(Exception e){
                 pixelCase = BlueFarPathSensor.value;
             }
-            pos = 0.45;
+
             telemetry.addData("Case", pixelCase);
             robot.update();
             robot.updatePos();
@@ -255,10 +246,7 @@ public class BlueFarSensorTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             ArrayList<CurvePoint> points = new ArrayList<>();
-            if(counter ==0){
-                runTime.startTime();
-            }
-            counter =1;
+
 
             switch (mRobotState) {
                 case DETECT:
@@ -307,7 +295,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                     }
 
                     if(pixelCase == 2){
-                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                             newState(State.LEFT_BACK);
                         } else {
                             time.reset();
@@ -319,7 +307,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                             time.reset();
                         }
                     } else {
-                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                             newState(State.STACK);
                         } else {
                             time.reset();
@@ -369,7 +357,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                     points.add(new CurvePoint(MID_OUT,0.8,0.8,10));
                     points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.8,0.8,10));
 
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
+                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                         newState(State.STACK);
                     } else {
                         time.reset();
@@ -848,7 +836,6 @@ public class BlueFarSensorTest extends LinearOpMode {
             telemetry.addData("Position", robot.getPos());
             telemetry.addData("Heading Error", Math.abs(robot.getPos().getHeading() - Math.toRadians(270)));
             telemetry.addData("IsDown", isDown);
-            telemetry.addData("RUNTIME",runTime.time());
             //telemetry.addData("Touch Sensor", robot.slides.isDown());
             telemetry.addData("Buffer Heading", Math.toDegrees(bufferHeading));
             telemetry.addData("FollowMe", RobotMovement.getLastFollowMe());
@@ -878,7 +865,7 @@ public class BlueFarSensorTest extends LinearOpMode {
 }
 
 @Config
-class BlueFarPathSensor{
+class RedFarPathSensor{
     //Set the set/start position of the servo in dashboard
     public static double value = 0;
 }

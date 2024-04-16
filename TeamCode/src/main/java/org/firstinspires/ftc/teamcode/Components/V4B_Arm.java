@@ -129,8 +129,8 @@ public class V4B_Arm {
     }
 
     public void armMid() {
-        leftArm.setPosition(0.21);
-        rightArm.setPosition(0.74);
+        leftArm.setPosition(0.2);
+        rightArm.setPosition(0.75);
     }
 
     public void armIn() {
