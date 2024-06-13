@@ -15,7 +15,11 @@ import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 
 public class Intake {
     Caching_Motor intake;
+<<<<<<< HEAD
     double pos = .945;
+=======
+    double pos = .76;
+>>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
     public Caching_Servo intake_dropper;
     /*
     1. 0.33
@@ -99,11 +103,22 @@ public class Intake {
         }
 
 
+<<<<<<< HEAD
         if(gamepad2Ex.isPress(GamepadEx.Control.dpad_right)){
             intakeValue = 1;
         }
         if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
             intakeValue = 0;
+=======
+
+        intake_dropper.setPosition(pos);
+
+        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_right)){
+            pos -= .02;
+        }
+        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
+            pos += .02;
+>>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
         }
 
         if(intakeToggle){

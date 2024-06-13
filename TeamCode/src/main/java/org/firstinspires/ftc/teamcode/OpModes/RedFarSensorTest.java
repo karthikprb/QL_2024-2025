@@ -1,30 +1,24 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 
-
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Components.Robot;
 import org.firstinspires.ftc.teamcode.PurePursuit.CurvePoint;
 import org.firstinspires.ftc.teamcode.PurePursuit.RobotMovement;
 
-
 import java.util.ArrayList;
 
 
-@Autonomous(name="BlueFarSensorTest")
-public class BlueFarSensorTest extends LinearOpMode {
+@Autonomous(name="RedFarSensorTest")
+public class RedFarSensorTest extends LinearOpMode {
 
 
     private enum State {
@@ -67,117 +61,85 @@ public class BlueFarSensorTest extends LinearOpMode {
 
 
     //First Position (Center of Tile of the Three Pieces of Tape)
-    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(5, 50.5, Math.toRadians(90));
+    public Pose2d STRAFE_BARRIER_RIGHT = new Pose2d(-5, 50.5, Math.toRadians(270));
 
-    public Pose2d STRAFE_BARRIER_RIGHT_2 = new Pose2d(5,55,Math.toRadians(90));
-<<<<<<< HEAD
+    public Pose2d STRAFE_BARRIER_RIGHT_2 = new Pose2d(-5,55,Math.toRadians(270));
 
-    public Pose2d STACK = new Pose2d(20.7, 52, Math.toRadians(90));
+    public Pose2d STACK = new Pose2d(-20.7, 51, Math.toRadians(270));
 
-    public Pose2d STACK_2 = new Pose2d(21.1, 52, Math.toRadians(90));
-=======
+    public Pose2d STACK_2 = new Pose2d(-21.1, 55, Math.toRadians(270));
 
-    public Pose2d STACK = new Pose2d(20.7, 51, Math.toRadians(90));
-
-    public Pose2d STACK_2 = new Pose2d(21.1, 55, Math.toRadians(90));
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
-
-    public Pose2d STACK_3 = new Pose2d(21.2, 49, Math.toRadians(90));
+    public Pose2d STACK_3 = new Pose2d(-21.2, 49, Math.toRadians(270));
 
 
     ;
 
-    public Pose2d CROSS_BARRIER = new Pose2d(-53, 55, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER = new Pose2d(66, 55, Math.toRadians(270));
 
-<<<<<<< HEAD
-    public Pose2d CROSS_BARRIER_RETURN = new Pose2d(-63, 55, Math.toRadians(90));
+    public Pose2d CROSS_BARRIER_2 = new Pose2d(59, 51, Math.toRadians(270));
 
-
-=======
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
-    public Pose2d CROSS_BARRIER_2 = new Pose2d(-59, 51, Math.toRadians(90));
-
-    public Pose2d EXTRAPOSITION_1 = new Pose2d(-70, 50, Math.toRadians(90));
+    public Pose2d EXTRAPOSITION_1 = new Pose2d(70, 50, Math.toRadians(270));
 
 
-    public Pose2d EXTRABACKPOSITION_1 = new Pose2d(-65, 43, Math.toRadians(90));
+    public Pose2d EXTRABACKPOSITION_1 = new Pose2d(65, 43, Math.toRadians(270));
 
-    public Pose2d EXTRAPOSITION_2 = new Pose2d(-80, 35, Math.toRadians(90));
+    public Pose2d EXTRAPOSITION_2 = new Pose2d(80, 35, Math.toRadians(270));
 
 
 
-    public Pose2d RIGHT_PLACEMENT_FORWARD = new Pose2d(-5, 25, Math.toRadians(0));
+    public Pose2d RIGHT_PLACEMENT_FORWARD = new Pose2d(5, 25, Math.toRadians(0));
 
-<<<<<<< HEAD
-    public Pose2d RIGHT_PLACEMENT_FORWARDUP = new Pose2d(0, 38, Math.toRadians(0));
-=======
     public Pose2d RIGHT_PLACEMENT_FORWARDUP = new Pose2d(0, 34, Math.toRadians(0));
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
 
-    public Pose2d RIGHTPLACEMENTSTRAFE = new Pose2d(8.3, 38, Math.toRadians(0));
-
-    public Pose2d RIGHTPLACEMENTSTRAFE_CROSS = new Pose2d(9, 53, Math.toRadians(0));
+    public Pose2d RIGHTPLACEMENTSTRAFE = new Pose2d(-9.3, 34, Math.toRadians(0));
 
 
+    public Pose2d MID_OUT = new Pose2d(4.4, 52, Math.toRadians(0));
 
-
-    public Pose2d MID_OUT = new Pose2d(-1, 55.3, Math.toRadians(0));
-
-    public Pose2d MID_PLACEMENT = new Pose2d(0.1, 48.7, Math.toRadians(0));
+    public Pose2d MID_PLACEMENT = new Pose2d(-0.1, 46, Math.toRadians(0));
 
 
 
     //Left Sequence
 
-    public Pose2d LEFT_POS1 = new Pose2d(0.2, 24, Math.toRadians(0));
-    public Pose2d LEFT_POS2TURN = new Pose2d(-0.1, 25.3, Math.toRadians(115));
-    public Pose2d LEFT_POS3 = new Pose2d(-8, 26, Math.toRadians(115));
+    public Pose2d LEFT_POS1 = new Pose2d(-0.2, 24, Math.toRadians(0));
+    public Pose2d LEFT_POS2TURN = new Pose2d(0.1, 25.3, Math.toRadians(270-25));
+    public Pose2d LEFT_POS3 = new Pose2d(7, 26, Math.toRadians(270-25));
 
-    public Pose2d LEFT_POS4 = new Pose2d(0.1, 26.1, Math.toRadians(90));
+    public Pose2d LEFT_POS4 = new Pose2d(-0.1, 26.1, Math.toRadians(270));
 
 
 
 
     //Middle Position Before Deposit
-    public Pose2d DEPOSIT_MID = new Pose2d(-68, 27, Math.toRadians(90));
+    public Pose2d DEPOSIT_MID = new Pose2d(68, 27, Math.toRadians(270));
 
 
-<<<<<<< HEAD
-    public Pose2d LEFT_DEPOSIT = new Pose2d(-86.9, 17.2, Math.toRadians(90));
-=======
-    public Pose2d LEFT_DEPOSIT = new Pose2d(-90.9, 12.5, Math.toRadians(90));
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
+    public Pose2d LEFT_DEPOSIT = new Pose2d(90.9, 12.5, Math.toRadians(270));
 
 
     //Actual Middle Deposit
-    public Pose2d MID_DEPOSIT =  new Pose2d(-87.7, 27, Math.toRadians(90));
+    public Pose2d MID_DEPOSIT =  new Pose2d(91, 18, Math.toRadians(270));
 
 
-    public Pose2d EXTRA_MID =  new Pose2d(-87.2, 23, Math.toRadians(90));
+    public Pose2d EXTRA_MID =  new Pose2d(91, 15, Math.toRadians(270));
 
 
-<<<<<<< HEAD
-    public Pose2d RIGHT_DEPOSIT =  new Pose2d(-87.3, 29.5, Math.toRadians(90));
+    public Pose2d RIGHT_DEPOSIT =  new Pose2d(90.4, 20, Math.toRadians(270));
 
-    public Pose2d EXTRA_RIGHT =  new Pose2d(-87.1+.7, 31, Math.toRadians(90));
-
-    public Pose2d EXTRA_RIGHTFORLEFT =  new Pose2d(-87.1+.7, 25, Math.toRadians(90));
-=======
-    public Pose2d RIGHT_DEPOSIT =  new Pose2d(-90.4, 20, Math.toRadians(90));
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
+    public Pose2d EXTRA_RIGHT =  new Pose2d(90, 21, Math.toRadians(270));
 
 
 
 
 
+    public Pose2d PARK_RIGHT =  new Pose2d(82.8, 25.2, Math.toRadians(270));
 
-    public Pose2d PARK_RIGHT =  new Pose2d(-82.8, 25.2, Math.toRadians(90));
+    public Pose2d PARK_MID =  new Pose2d(83.75, 14, Math.toRadians(270));
 
-    public Pose2d PARK_MID =  new Pose2d(-83.75, 14, Math.toRadians(90));
+    public Pose2d PARK_LEFT =  new Pose2d(83, 19, Math.toRadians(270));
 
-    public Pose2d PARK_LEFT =  new Pose2d(-83, 19, Math.toRadians(90));
-
-    public Pose2d FINAL_PARK =  new Pose2d(-83, 29, Math.toRadians(90));
+    public Pose2d FINAL_PARK =  new Pose2d(83, 29, Math.toRadians(270));
 
 
 
@@ -195,14 +157,9 @@ public class BlueFarSensorTest extends LinearOpMode {
     double y=0;
     double bufferHeading = 0;
 
-<<<<<<< HEAD
-    double pos = 0.56;
-    double pos2 = 0.635;
-=======
     double pos = 0;
     double pos2 = .44;
 
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
     boolean go = true;
 
     double returning = 0;
@@ -211,7 +168,7 @@ public class BlueFarSensorTest extends LinearOpMode {
 
     boolean distanceL;
     boolean distanceR;
-    double counter = 0;
+
     double distanceFront = 0;
 
     double distanceSide = 0;
@@ -232,14 +189,7 @@ public class BlueFarSensorTest extends LinearOpMode {
 
     ElapsedTime goTime;
 
-<<<<<<< HEAD
-    ElapsedTime servoTime;
-
-=======
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
     ElapsedTime testTime;
-
-    ElapsedTime runTime;
     NormalizedColorSensor colorSensor;
     Robot robot;
 
@@ -251,11 +201,6 @@ public class BlueFarSensorTest extends LinearOpMode {
         secondTime = new ElapsedTime();
         goTime = new ElapsedTime();
         testTime = new ElapsedTime();
-        runTime = new ElapsedTime();
-<<<<<<< HEAD
-        servoTime = new ElapsedTime();
-=======
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
         robot.setStartPose(new Pose2d(0, 0, 0));
         robot.stopAndResetEncoders();
 
@@ -277,7 +222,7 @@ public class BlueFarSensorTest extends LinearOpMode {
             } catch(Exception e){
                 pixelCase = BlueFarPathSensor.value;
             }
-            pos = 0.56;
+
             telemetry.addData("Case", pixelCase);
             robot.update();
             robot.updatePos();
@@ -297,16 +242,11 @@ public class BlueFarSensorTest extends LinearOpMode {
 
         time.startTime();
         secondTime.startTime();
-        servoTime.startTime();
-        testTime.startTime();
 
 
         while (opModeIsActive()) {
             ArrayList<CurvePoint> points = new ArrayList<>();
-            if(counter ==0){
-                runTime.startTime();
-            }
-            counter =1;
+
 
             switch (mRobotState) {
                 case DETECT:
@@ -316,7 +256,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                         points.add(new CurvePoint(RIGHT_PLACEMENT_FORWARDUP, 0.6, 0.6, 10));
                         points.add(new CurvePoint(RIGHTPLACEMENTSTRAFE, 0.5, 0.5, 10));
                     } else if (pixelCase == 1){
-                        points.add(new CurvePoint(MID_PLACEMENT, 0.54 ,0.54, 10));
+                        points.add(new CurvePoint(MID_PLACEMENT, 0.4 ,0.4, 10));
                     } else if (pixelCase == 2){
                         points.add(new CurvePoint(LEFT_POS1, 0.6, 0.6, 10));
                     }
@@ -345,7 +285,6 @@ public class BlueFarSensorTest extends LinearOpMode {
 
                     if(pixelCase == 0){
                         points.add(new CurvePoint(RIGHTPLACEMENTSTRAFE,0.75,0.75,10));
-                        points.add(new CurvePoint(RIGHTPLACEMENTSTRAFE_CROSS,0.75,0.75,10));
                         points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.75,0.75,10));
                     } else if(pixelCase == 1){
                         points.add(new CurvePoint(MID_PLACEMENT,0.7,0.7,10));
@@ -356,7 +295,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                     }
 
                     if(pixelCase == 2){
-                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                             newState(State.LEFT_BACK);
                         } else {
                             time.reset();
@@ -368,8 +307,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                             time.reset();
                         }
                     } else {
-                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
-                            testTime.reset();
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                             newState(State.STACK);
                         } else {
                             time.reset();
@@ -409,7 +347,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                     points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.7,0.7,10));
 
                     if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5){
-                        testTime.reset();
                         newState(State.STACK);
                     } else {
                         time.reset();
@@ -420,8 +357,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                     points.add(new CurvePoint(MID_OUT,0.8,0.8,10));
                     points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.8,0.8,10));
 
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() - Math.toRadians(90)) < Math.toRadians(3)){
-                        testTime.reset();
+                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3.5 && Math.abs(robot.getPos().getHeading() + Math.toRadians(90)) > Math.toRadians(3)){
                         newState(State.STACK);
                     } else {
                         time.reset();
@@ -435,23 +371,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                     distanceL = frontTray.isPressed();
                     distanceR = backTray.isPressed();
                     robot.v4b.open();
-<<<<<<< HEAD
-
-                    robot.v4b.specialMid();
-
-                    if(cycle==0||cycle==1) {
-                        points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.5, 0.5, 10));
-                    }else{
-                        points.add(new CurvePoint(STRAFE_BARRIER_RIGHT_2,0.5,0.5,10));
-                    }
-                    if(cycle == 1) {
-                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 20) {
-                            points.add(new CurvePoint(STACK, 0.5, 0.5, 10));
-                        }
-                    } else if (cycle == 2){
-                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 20) {
-                            points.add(new CurvePoint(STACK_2, 0.5, 0.5, 10));
-=======
                     if(cycle==0||cycle==1) {
                         points.add(new CurvePoint(STRAFE_BARRIER_RIGHT, 0.62, 0.62, 10));
                     }else{
@@ -464,7 +383,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                     } else if (cycle == 2){
                         if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 70) {
                             points.add(new CurvePoint(STACK_2, 0.3, 0.4, 10));
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                         }
                     } else {
                             points.add(new CurvePoint(STACK, 0.5, 0.5, 10));
@@ -472,15 +390,6 @@ public class BlueFarSensorTest extends LinearOpMode {
 
                     if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 2.5) {
                         goTime.startTime();
-<<<<<<< HEAD
-
-                        if (cycle == 1 || cycle == 2) {
-                                    if (distanceL && distanceR||testTime.time()>5) {
-                                        robot.intake.intake_dropper.setPosition(0.52);
-                                        time.reset();
-                                        secondTime.reset();
-                                        pos = pos+.01;
-=======
                         testTime.startTime();
                         if (cycle == 1 || cycle == 2) {
                                     if (distanceL && distanceR) {
@@ -489,18 +398,11 @@ public class BlueFarSensorTest extends LinearOpMode {
                                         time.reset();
                                         secondTime.reset();
                                         pos = pos+.08;
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                         go = true;
-                                        newState(State.BARRIER_CROSS);
-
                                     } else {
                                         if (cycle == 1) {
                                             if(go){
-<<<<<<< HEAD
-                                                pos+=.004;
-=======
                                                 pos+=.005;
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                                 go= false;
                                             }
 
@@ -509,14 +411,9 @@ public class BlueFarSensorTest extends LinearOpMode {
                                                 goTime.reset();
                                             }
                                             robot.intake.intake_dropper.setPosition(pos);
-
                                         } else if (cycle == 2) {
                                             if(go){
-<<<<<<< HEAD
-                                                pos+=.012;
-=======
                                                 pos+=.005;
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                                 go = false;
                                             }
 
@@ -529,16 +426,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                                     }
                             } else {
 
-<<<<<<< HEAD
-                                    if (distanceL && distanceR||testTime.time()>5) {
-                                        pos = pos2+.035;
-                                        robot.intake.intake_dropper.setPosition(0.54);
-                                        go = true;
-                                        time.reset();
-                                        secondTime.reset();
-                                        newState(State.BARRIER_CROSS);
-
-=======
                                     if (distanceL && distanceR) {
                                         pos = pos2+.08;
                                         robot.intake.intake_dropper.setPosition(0.38);
@@ -546,7 +433,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                                     go = true;
                                     time.reset();
                                     secondTime.reset();
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                 }
                                  else {
                                      if(go){
@@ -576,14 +462,12 @@ public class BlueFarSensorTest extends LinearOpMode {
                 case BARRIER_CROSS:
                     PPIND = true;
                     gtp = false;
-                    robot.intake.intake_dropper.setPosition(0.45);
+                    robot.intake.intake_dropper.setPosition(0.3);
 
-                    points.add(new CurvePoint(STACK, 0.7, 0.7, 10));
-                    points.add(new CurvePoint(CROSS_BARRIER, 0.7, 0.7, 10));
+                        points.add(new CurvePoint(STACK, 0.7, 0.7, 10));
+                        points.add(new CurvePoint(CROSS_BARRIER, 0.7, 0.7, 10));
 
-
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 30){
-                        if (cycle == 0) {
+                    if (cycle == 0) {
                             if (pixelCase == 0) {
                                 points.add(new CurvePoint(RIGHT_DEPOSIT, 0.63, 0.63, 10));
                             } else if (pixelCase == 1) {
@@ -593,124 +477,24 @@ public class BlueFarSensorTest extends LinearOpMode {
                             }
                         } else if (cycle == 1 || cycle == 2) {
                             if (pixelCase == 0) {
-                                points.add(new CurvePoint(RIGHT_DEPOSIT, 0.63, 0.63, 10));
+                                points.add(new CurvePoint(EXTRA_MID, 0.63, 0.63, 10));
                             } else if (pixelCase == 1) {
                                 points.add(new CurvePoint(EXTRA_RIGHT, 0.63, 0.63, 10));
                             } else if (pixelCase == 2) {
                                 points.add(new CurvePoint(EXTRA_RIGHT, 0.63, 0.63, 10));
                             }
                         }
-                    } else {
-                        if (cycle == 0) {
-                            if (pixelCase == 0) {
-                                points.add(new CurvePoint(RIGHT_DEPOSIT, 0.63, 0.63, 10));
-                            } else if (pixelCase == 1) {
-                                points.add(new CurvePoint(MID_DEPOSIT, 0.63, 0.63, 10));
-                            } else if (pixelCase == 2) {
-                                points.add(new CurvePoint(LEFT_DEPOSIT, 0.63, 0.63, 10));
-                            }
-                        } else if (cycle == 1 || cycle == 2) {
-                            if (pixelCase == 0) {
-                                points.add(new CurvePoint(RIGHT_DEPOSIT, 0.63, 0.63, 10));
-                            } else if (pixelCase == 1) {
-                                points.add(new CurvePoint(EXTRA_RIGHT, 0.63, 0.63, 10));
-                            } else if (pixelCase == 2) {
-                                points.add(new CurvePoint(EXTRA_RIGHTFORLEFT, 0.63, 0.63, 10));
-                            }
-                        }
-                    }
 
-
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 120){
-                        robot.intake.intakeSet(1.0);
-
-                    }
-
-
-                        if(robot.getPos().vec().distTo(points.get(points.size()-1).toVec())<110) {
-                            if(cycle == 0) {
-                                if(secondTime.time()>.1){
-                                    robot.v4b.armIn();
-                                }
-
-                                if (secondTime.time() > .2 && secondTime.time() < .5) {
-                                    robot.v4b.grab();
-                                } else if (secondTime.time() > .5 && secondTime.time() < .76) {
-                                    robot.v4b.open();
-                                } else if (secondTime.time() > .76 && secondTime.time() < 0.9) {
-                                    robot.v4b.grab();
-                                } else if(secondTime.time() > 0.9 && secondTime.time() < 1.0){
-                                    robot.v4b.open();
-                                    robot.v4b.armMid();
-                                } else if (secondTime.time() > 1.0 && secondTime.time() < 1.1){
-                                    robot.v4b.armIn();
-                                } else if (secondTime.time() > 1.1 && secondTime.time() < 1.3){
-                                    robot.v4b.grab();
-                                } else if(secondTime.time() > 1.3 && secondTime.time() < 1.5){
-                                    robot.v4b.open();
-                                } else if(secondTime.time() >1.5){
-                                    robot.v4b.grab();
-                                }
-
-
-                            } else if (cycle == 1){
-                                if(secondTime.time()>.1){
-                                    robot.v4b.armIn();
-                                }
-
-                                if (secondTime.time() > .2 && secondTime.time() < .5) {
-                                    robot.v4b.grab();
-                                } else if (secondTime.time() > .5 && secondTime.time() < .76) {
-                                    robot.v4b.open();
-                                } else if (secondTime.time() > .76 && secondTime.time() < 0.9) {
-                                    robot.v4b.grab();
-                                } else if(secondTime.time() > 0.9 && secondTime.time() < 1.0){
-                                    robot.v4b.open();
-                                    robot.v4b.armMid();
-                                } else if (secondTime.time() > 1.0 && secondTime.time() < 1.1){
-                                    robot.v4b.armIn();
-                                } else if (secondTime.time() > 1.1 && secondTime.time() < 1.3){
-                                    robot.v4b.grab();
-                                } else if(secondTime.time() > 1.3 && secondTime.time() < 1.5){
-                                    robot.v4b.open();
-                                } else if(secondTime.time() >1.5){
-                                    robot.v4b.grab();
-                                }
-
-
-                            }else if (cycle == 2){
-                                if(secondTime.time()>.1){
-                                    robot.v4b.armIn();
-                                }
-
-                                if (secondTime.time() > .2 && secondTime.time() < .5) {
-                                    robot.v4b.grab();
-                                } else if (secondTime.time() > .5 && secondTime.time() < .76) {
-                                    robot.v4b.open();
-                                } else if (secondTime.time() > .76 && secondTime.time() < 0.9) {
-                                    robot.v4b.grab();
-                                } else if(secondTime.time() > 0.9 && secondTime.time() < 1.0){
-                                    robot.v4b.open();
-                                    robot.v4b.armMid();
-                                } else if (secondTime.time() > 1.0 && secondTime.time() < 1.1){
-                                    robot.v4b.armIn();
-                                } else if (secondTime.time() > 1.1 && secondTime.time() < 1.3){
-                                    robot.v4b.grab();
-                                } else if(secondTime.time() > 1.3 && secondTime.time() < 1.5){
-                                    robot.v4b.open();
-                                } else if(secondTime.time() >1.5){
-                                    robot.v4b.grab();
-                                }
-
-<<<<<<< HEAD
-                            }
-                        } else {
-                            secondTime.reset();
+                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 140) {
+                            robot.intake.stop();
+                            robot.v4b.flapOpen();
                         }
 
+                        if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 190 && robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) > 140){
+                            robot.intake.outtakeDeposit();
 
-                        if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 28) {
-=======
+                        }
+
                     if(cycle == 0) {
                         if(secondTime.time()>.1){
                             robot.v4b.armIn();
@@ -755,35 +539,23 @@ public class BlueFarSensorTest extends LinearOpMode {
                     }
 
                         if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 47) {
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
 
                             robot.v4b.armOut();
                             if (cycle == 0) {
-                                robot.slides.setPosition(260);
+                                robot.slides.setPosition(160);
                             } else if (cycle == 1) {
-                                robot.slides.setPosition(450);
+                                robot.slides.setPosition(225);
                             } else if (cycle == 2) {
-                                robot.slides.setPosition(500);
+                                robot.slides.setPosition(225);
                             }
-<<<<<<< HEAD
-=======
                             if (time.time() > 1.0) {
                                 newState(State.DEPOSIT);
                                 secondTime.reset();
                             }
                         } else {
                             time.reset();
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
 
                         }
-
-                    if (robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3) {
-                        secondTime.reset();
-                        newState(State.DEPOSIT);
-
-                    }
-
-
 
                     break;
 
@@ -794,15 +566,11 @@ public class BlueFarSensorTest extends LinearOpMode {
 
                     if (cycle == 0) {
 
-<<<<<<< HEAD
-                        robot.slides.setPosition(260);
-=======
                         robot.slides.setPosition(160);
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                     } else if (cycle == 1) {
-                        robot.slides.setPosition(450);
+                        robot.slides.setPosition(225);
                     } else if (cycle == 2) {
-                        robot.slides.setPosition(500);
+                        robot.slides.setPosition(225);
                     }
 
                     if(cycle == 0){
@@ -822,23 +590,14 @@ public class BlueFarSensorTest extends LinearOpMode {
                             if (secondTime.time() <= 0.3) {
                                 robot.v4b.grab();
                                 robot.v4b.armOut();
-                            } else if (secondTime.time() > 0.45 && secondTime.time() < 0.65) {
-                                robot.v4b.grab();
+                            } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
                                 robot.v4b.horitzontalRight();
-<<<<<<< HEAD
-                            } else if (secondTime.time() > 0.65 && secondTime.time() < 0.9) {
-                                robot.v4b.openDepositTestHorizontal();
-                            } else if (secondTime.time() > 0.9 && secondTime.time() < 1.15) {
-                                robot.v4b.vertical();
-                            } else if (secondTime.time() > 1.15) {
-=======
                                 robot.v4b.grab();
                             } else if (secondTime.time() > 1.2 && secondTime.time() < 1.4) {
                                 robot.v4b.openDepositTestHorizontal();
                             } else if (secondTime.time() > 1.4 && secondTime.time() < 1.6) {
                                 robot.v4b.vertical();
                             } else if (secondTime.time() > 1.6) {
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
@@ -846,18 +605,14 @@ public class BlueFarSensorTest extends LinearOpMode {
                             if (secondTime.time() <= 0.3) {
                                 robot.v4b.grab();
                                 robot.v4b.armOut();
-<<<<<<< HEAD
-                            } else if (secondTime.time() > 0.45 && secondTime.time() < 0.65) {
-=======
                             } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                 robot.v4b.grab();
                                 robot.v4b.horizontalLeft();
-                            } else if (secondTime.time() > 0.65 && secondTime.time() < 0.9) {
+                            } else if (secondTime.time() > 1 && secondTime.time() < 1.2) {
                                 robot.v4b.openDepositTestHorizontal();
-                            } else if (secondTime.time() > 0.9 && secondTime.time() < 1.15) {
+                            } else if (secondTime.time() > 1.2 && secondTime.time() < 1.4) {
                                 robot.v4b.vertical();
-                            } else if (secondTime.time() > 1.15) {
+                            } else if (secondTime.time() > 1.4) {
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
@@ -865,18 +620,14 @@ public class BlueFarSensorTest extends LinearOpMode {
                             if (secondTime.time() <= 0.3) {
                                 robot.v4b.grab();
                                 robot.v4b.armOut();
-<<<<<<< HEAD
-                            } else if (secondTime.time() > 0.45 && secondTime.time() < 0.65) {
-=======
                             } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                 robot.v4b.grab();
                                 robot.v4b.horizontalLeft();
-                            } else if (secondTime.time() > 0.65 && secondTime.time() < 0.9) {
+                            } else if (secondTime.time() > 1 && secondTime.time() < 1.2) {
                                 robot.v4b.openDepositTestHorizontal();
-                            } else if (secondTime.time() > 0.9 && secondTime.time() < 1.15) {
+                            } else if (secondTime.time() > 1.2 && secondTime.time() < 1.4) {
                                 robot.v4b.vertical();
-                            } else if (secondTime.time() > 1.15) {
+                            } else if (secondTime.time() > 1.4) {
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
@@ -887,14 +638,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                             if (secondTime.time() <= 0.3) {
                                 robot.v4b.grab();
                                 robot.v4b.armOut();
-<<<<<<< HEAD
-                            } else if (secondTime.time() > 0.4 && secondTime.time() < 0.5) {
-                                robot.v4b.vertical();
-                                robot.v4b.grab();
-                            } else if (secondTime.time() > 0.5 && secondTime.time() < 0.65) {
-                                robot.v4b.openDepositTest();
-                            } else if (secondTime.time() > 0.65) {
-=======
                             } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
                                 robot.v4b.vertical();
                                 robot.v4b.grab();
@@ -903,7 +646,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                             } else if (secondTime.time() > 1.4 && secondTime.time() < 1.6) {
                                 robot.v4b.vertical();
                             } else if (secondTime.time() > 1.6) {
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
@@ -911,14 +653,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                             if (secondTime.time() <= 0.3) {
                                 robot.v4b.grab();
                                 robot.v4b.armOut();
-<<<<<<< HEAD
-                            } else if (secondTime.time() > 0.4 && secondTime.time() < 0.5) {
-                                robot.v4b.vertical();
-                                robot.v4b.grab();
-                            } else if (secondTime.time() > 0.5 && secondTime.time() < 0.65) {
-                                robot.v4b.openDepositTest();
-                            } else if (secondTime.time() > 0.65) {
-=======
                             } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
                                 robot.v4b.grab();
                                 robot.v4b.horizontalLeft();
@@ -927,7 +661,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                             } else if (secondTime.time() > 1.2 && secondTime.time() < 1.4) {
                                 robot.v4b.vertical();
                             } else if (secondTime.time() > 1.4) {
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
@@ -935,14 +668,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                             if (secondTime.time() <= 0.3) {
                                 robot.v4b.grab();
                                 robot.v4b.armOut();
-<<<<<<< HEAD
-                            } else if (secondTime.time() > 0.4 && secondTime.time() < 0.5) {
-                                robot.v4b.vertical();
-                                robot.v4b.grab();
-                            } else if (secondTime.time() > 0.5 && secondTime.time() < 0.65) {
-                                robot.v4b.openDepositTest();
-                            } else if (secondTime.time() > 0.65) {
-=======
                             } else if (secondTime.time() > 0.45 && secondTime.time() < 1) {
                                 robot.v4b.grab();
                                 robot.v4b.horizontalLeft();
@@ -951,7 +676,6 @@ public class BlueFarSensorTest extends LinearOpMode {
                             } else if (secondTime.time() > 1.2 && secondTime.time() < 1.4) {
                                 robot.v4b.vertical();
                             } else if (secondTime.time() > 1.4) {
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                                 robot.v4b.armIn();
                                 newState(State.FINISH);
                             }
@@ -990,14 +714,11 @@ public class BlueFarSensorTest extends LinearOpMode {
 
                     PPIND = true;
                     gtp = false;
-<<<<<<< HEAD
-=======
                     if(cycle == 1){
                         pos = 0.50;
                     } else if (cycle == 2){
                         pos = 0.64;
                     }
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
                     robot.intake.intake_dropper.setPosition(pos);
                     robot.v4b.armMid();
                     robot.v4b.open();
@@ -1022,9 +743,9 @@ public class BlueFarSensorTest extends LinearOpMode {
 
 
                     if(cycle == 1){
-                        points.add(new CurvePoint(CROSS_BARRIER_RETURN,0.7,0.85,10));
+                        points.add(new CurvePoint(CROSS_BARRIER,0.7,0.85,10));
                     } else if (cycle == 2){
-                        points.add(new CurvePoint(CROSS_BARRIER_RETURN,0.7,0.85,10));
+                        points.add(new CurvePoint(CROSS_BARRIER,0.7,0.85,10));
                     }
 
                     points.add(new CurvePoint(STRAFE_BARRIER_RIGHT,0.7,0.85,10));
@@ -1034,8 +755,7 @@ public class BlueFarSensorTest extends LinearOpMode {
                     }
 
 
-                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 7){
-                        testTime.reset();
+                    if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3){
                         newState(State.STACK);
                     }
                     else {
@@ -1059,7 +779,6 @@ public class BlueFarSensorTest extends LinearOpMode {
 
 
                     if(robot.getPos().vec().distTo(points.get(points.size() - 1).toVec()) < 3){
-                        testTime.reset();
                         newState(State.STACK);
                     }
                     else {
@@ -1117,7 +836,6 @@ public class BlueFarSensorTest extends LinearOpMode {
             telemetry.addData("Position", robot.getPos());
             telemetry.addData("Heading Error", Math.abs(robot.getPos().getHeading() - Math.toRadians(270)));
             telemetry.addData("IsDown", isDown);
-            telemetry.addData("RUNTIME",runTime.time());
             //telemetry.addData("Touch Sensor", robot.slides.isDown());
             telemetry.addData("Buffer Heading", Math.toDegrees(bufferHeading));
             telemetry.addData("FollowMe", RobotMovement.getLastFollowMe());
@@ -1147,7 +865,7 @@ public class BlueFarSensorTest extends LinearOpMode {
 }
 
 @Config
-class BlueFarPathSensor{
+class RedFarPathSensor{
     //Set the set/start position of the servo in dashboard
     public static double value = 0;
 }
