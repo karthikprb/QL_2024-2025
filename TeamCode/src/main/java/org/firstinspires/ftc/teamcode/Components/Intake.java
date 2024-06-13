@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 
 public class Intake {
     Caching_Motor intake;
+    double pos = .945;
     public Caching_Servo intake_dropper;
     /*
     1. 0.33
@@ -31,6 +32,10 @@ public class Intake {
     Telemetry telemetry;
 
     boolean intakeToggle = false;
+
+    double intakeValue = 0;
+
+    boolean slideSpeedToggle = false;
     private boolean outtake = false;
 
     public Intake(HardwareMap map, Telemetry telemetry){
@@ -49,10 +54,10 @@ public class Intake {
     }
 
    public void drop() {
-        intake_dropper.setPosition(0.92);
+        intake_dropper.setPosition(1);
     }
     public void lift(){
-        intake_dropper.setPosition(0);
+        intake_dropper.setPosition(0.07);
     }
 
 
@@ -66,10 +71,21 @@ public class Intake {
 
     public void intake(GamepadEx gamepadEx, GamepadEx gamepad2Ex, Telemetry telemetry){
 
+        if(gamepad2Ex.isPress(GamepadEx.Control.b)){
+            slideSpeedToggle = !slideSpeedToggle;
+        }
 
-        if(Slides.hangToggle == true){
+
+        if(slideSpeedToggle){
+            gamepad2Ex.gamepad.rumble(100);
             lift();
-            intakeHeight = 7;
+        } else {
+            if(intakeValue == 1){
+                intake_dropper.setPosition(0.87);
+            } else {
+                intake_dropper.setPosition(pos);
+
+            }
         }
 
 
@@ -82,29 +98,12 @@ public class Intake {
             intakeToggle = false;
         }
 
-        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
-            if(intakeHeight > 0) {
-                intakeHeight -= 1;
-            }
-        }
-        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_right)){
-            if(intakeHeight < 5) {
-                intakeHeight += 1;
-            }
-        }
 
-        if(intakeHeight == 0){
-            intake_dropper.setPosition(0.9);
-        } else if (intakeHeight == 1){
-            intake_dropper.setPosition(0.9);
-        } else if(intakeHeight == 2){
-            intake_dropper.setPosition(0.7);
-        }else if(intakeHeight == 3){
-            intake_dropper.setPosition(0.62);
-        } else if(intakeHeight == 4){
-            intake_dropper.setPosition(0.54);
-        } else if(intakeHeight == 5){
-            intake_dropper.setPosition(0.43);
+        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_right)){
+            intakeValue = 1;
+        }
+        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
+            intakeValue = 0;
         }
 
         if(intakeToggle){

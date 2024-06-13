@@ -27,6 +27,7 @@ public class V4B_Arm {
 
     Caching_Servo holder;
 
+
     Caching_Servo wrist;
 
     Caching_Servo flap;
@@ -104,8 +105,8 @@ public class V4B_Arm {
     }
 
     public void grab() {
-        leftGrab.setPosition(0.26);
-        rightGrab.setPosition(0.24);
+        leftGrab.setPosition(0.24);
+        rightGrab.setPosition(0.22);
     }
 
     public void deposit() {
@@ -113,8 +114,8 @@ public class V4B_Arm {
         rightGrab.setPosition(0.55);
     }
     public void open(){
-        leftGrab.setPosition(0.41);
-        rightGrab.setPosition(0.6);
+        leftGrab.setPosition(0.33);
+        rightGrab.setPosition(0.57);
     }
 
 
@@ -133,41 +134,56 @@ public class V4B_Arm {
         rightArm.setPosition(0.74);
     }
 
+    public void specialMid(){
+        leftArm.setPosition(0.22);
+        rightArm.setPosition(.76);
+    }
+
     public void armIn() {
-        leftArm.setPosition(0.15);
-        rightArm.setPosition(0.80);
+        leftArm.setPosition(0.14);
+        rightArm.setPosition(0.81);
     }
 
     public void armUp() {
-        leftArm.setPosition(0.21);
-        rightArm.setPosition(0.74);
+        leftArm.setPosition(0.24);
+        rightArm.setPosition(0.71);
     }
     public void armOut() {
-        leftArm.setPosition(0.75);
-        rightArm.setPosition(0.2);
+        leftArm.setPosition(0.81);
+        rightArm.setPosition(0.14);
     }
 
 
     public void sixtyDegreesLeft(){
-        wrist.setPosition(0.57);
+        wrist.setPosition(0.38);
     }
 
     public void sixtyDegreesRight(){
-        wrist.setPosition(0.65);
+        wrist.setPosition(0.46);
     }
 
     public void horizontalLeft(){
-        wrist.setPosition(0.32);
+        wrist.setPosition(0.14);
     }
 
     public void horitzontalRight(){
-        wrist.setPosition(0.88);
+        wrist.setPosition(0.7);
     }
 
 
     public void vertical(){
-        wrist.setPosition(0.6);
+        wrist.setPosition(0.422);
     }
+
+    public void flipVertical(){
+        wrist.setPosition(0.98);
+    }
+
+    public void flipSixtyDegreesLeft(){
+        wrist.setPosition(0.91);
+    }
+
+
 
     public void flapClose(){
         flap.setPosition(0.84); //FLAP CLOSE = 0.84
@@ -202,10 +218,10 @@ public class V4B_Arm {
         }
 
         if(gamepad2.isPress(GamepadEx.Control.dpad_down)){
-            if(wristCase > 0){
+            if(wristCase > -2){
                 wristCase -= 1;
             } else {
-                wristCase = 0;
+                wristCase = -2;
             }
         }
 
@@ -266,6 +282,10 @@ public class V4B_Arm {
                             sixtyDegreesRight();
                         } else if(wristCase == 3) {
                             horizontalLeft();
+                        } else if(wristCase == -1){
+                            flipVertical();
+                        } else if(wristCase == -2){
+                            flipSixtyDegreesLeft();
                         } else {
                             horitzontalRight();
                         }
@@ -288,8 +308,8 @@ public class V4B_Arm {
                 wristCase = 0;
                 grab();
                 if(time.time()>.1){
-                    armIn();
-                    if(time.time()>.5){
+                    armUp();
+                    if(time.time()>0.75){
                         grabberToggle =0;
                     }
                 }

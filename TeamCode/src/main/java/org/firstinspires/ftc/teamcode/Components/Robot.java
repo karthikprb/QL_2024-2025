@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -24,7 +25,7 @@ import java.util.List;
 public class   Robot {
 
     public Mecanum_Drive drive;
-
+    private VoltageSensor voltageSensor;
     public boolean robotCentric = false;
 
     public boolean driveToggle = true;
@@ -81,6 +82,7 @@ public class   Robot {
         drive = new Mecanum_Drive(map, telemetry);
         v4b = new V4B_Arm(map,telemetry);
         plane = new Airplane(map, telemetry);
+        voltageSensor = map.voltageSensor.iterator().next();
 
         telemetry.update();
     }
@@ -91,17 +93,18 @@ public class   Robot {
 
 
 
+
         if(gamepad2ex.isPress(GamepadEx.Control.start)){
             driveToggle = !driveToggle;
         }
 
         if(driveToggle){
-            drive.drive(gamepad1ex.gamepad, 1.0, 0.6);
+            drive.drive(gamepad1ex.gamepad, 1.0, 0.7);
         } else {
             if(V4B_Arm.grabberToggle == 2){
                 drive.driveCentric(gamepad1ex.gamepad, 1, 0.5, getPos().getHeading());
             } else {
-                drive.driveCentric(gamepad1ex.gamepad, 1, 0.7, getPos().getHeading());
+                drive.driveCentric(gamepad1ex.gamepad, 1, 0.8, getPos().getHeading());
             }
         }
 
@@ -128,7 +131,8 @@ public class   Robot {
 
         telemetry.addData("Heading",Math.toDegrees(getPos().getHeading()));
         telemetry.addData("Field Centric:", !robotCentric);
-
+        telemetry.addData("VOLTAGE",voltageSensor.getVoltage());
+        telemetry.addData("CONNECTION",voltageSensor.getConnectionInfo());
 
         if(gamepad1ex.isPress(GamepadEx.Control.start)){
             telemetry.addLine("Resetting...");

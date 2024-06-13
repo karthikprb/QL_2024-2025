@@ -110,30 +110,26 @@ public class pixelsRedFar extends OpenCvPipeline {
 
 
 
-        if(contThree.size() >= 3){
+        if(contThree.size() >= 2){
             Moments mom_1 = Imgproc.moments(contThree.get(0));
             Moments mom_2 = Imgproc.moments(contThree.get(1));
-            Moments mom_3 = Imgproc.moments(contThree.get(2));
 
             Point centro1 = calculateCentroid(mom_1);
             Point centro2 = calculateCentroid(mom_2);
-            Point centro3 = calculateCentroid(mom_3);
 
             Imgproc.putText(contoursOnFrameMat,"1(" + centro1.x + ")", centro1, 0, 0.5, new Scalar(255, 255, 255));
             Imgproc.putText(contoursOnFrameMat,"2(" + centro2.x + ")", centro2, 0, 0.5, new Scalar(255, 255, 255));
-            Imgproc.putText(contoursOnFrameMat,"3(" + centro3.x + ")", centro3, 0, 0.5, new Scalar(255, 255, 255));
 
             Imgproc.drawContours(contoursOnFrameMat, contThree, 0, new Scalar(255,255,255));
             Imgproc.drawContours(contoursOnFrameMat, contThree, 1, new Scalar(255,255,255));
-            Imgproc.drawContours(contoursOnFrameMat, contThree, 2, new Scalar(255,255,255));
 
 
-            if(Imgproc.contourArea(contThree.get(0))>4900){
-                pixelCase = 0;
-            }else if(Imgproc.contourArea(contThree.get(1))>2000){
+            if(Imgproc.contourArea(contThree.get(0))>3500){
+                pixelCase = 2;
+            }else if(Imgproc.contourArea(contThree.get(1))>4000){
                 pixelCase = 1;
             }else{
-                pixelCase = 2;
+                pixelCase = 0;
             }
         }
 
@@ -170,6 +166,6 @@ class pixelssRedFar{
 
     public static int threshold = 400;
 
-    public static int horizon = 130;
+    public static int horizon = 40;
 
 }
