@@ -2,9 +2,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import android.text.method.Touch;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -18,7 +15,6 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Components.Robot;
 
@@ -30,7 +26,6 @@ public class DistanceSensorTest extends LinearOpMode {
     //Robot robot;
     TouchSensor digitalSensorTwo;
     DistanceSensor frontSensor;
-
 
     TouchSensor digitalSensor;
 
@@ -58,7 +53,6 @@ public class DistanceSensorTest extends LinearOpMode {
         digitalSensor = hardwareMap.get(TouchSensor.class, "trayfront");
         digitalSensorTwo = hardwareMap.get(TouchSensor.class, "trayback");
         frontSensor = hardwareMap.get(DistanceSensor.class, "front");
-
         //robot.setStartPose(new Pose2d(0, 0, 0));
 /*
         while (!isStarted() && !isStopRequested()) {
@@ -104,7 +98,6 @@ public class DistanceSensorTest extends LinearOpMode {
             telemetry.addData("POLOLUFront", POLOLUFront);
             telemetry.addData("POLOLUBack", POLOLUBack);
             telemetry.addData("Front", front);
-
             telemetry.update();
             update();
         }

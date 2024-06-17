@@ -15,11 +15,7 @@ import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 
 public class Intake {
     Caching_Motor intake;
-<<<<<<< HEAD
-    double pos = .945;
-=======
     double pos = .76;
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
     public Caching_Servo intake_dropper;
     /*
     1. 0.33
@@ -36,10 +32,6 @@ public class Intake {
     Telemetry telemetry;
 
     boolean intakeToggle = false;
-
-    double intakeValue = 0;
-
-    boolean slideSpeedToggle = false;
     private boolean outtake = false;
 
     public Intake(HardwareMap map, Telemetry telemetry){
@@ -58,10 +50,10 @@ public class Intake {
     }
 
    public void drop() {
-        intake_dropper.setPosition(1);
+        intake_dropper.setPosition(0.92);
     }
     public void lift(){
-        intake_dropper.setPosition(0.07);
+        intake_dropper.setPosition(0);
     }
 
 
@@ -75,21 +67,10 @@ public class Intake {
 
     public void intake(GamepadEx gamepadEx, GamepadEx gamepad2Ex, Telemetry telemetry){
 
-        if(gamepad2Ex.isPress(GamepadEx.Control.b)){
-            slideSpeedToggle = !slideSpeedToggle;
-        }
 
-
-        if(slideSpeedToggle){
-            gamepad2Ex.gamepad.rumble(100);
+        if(Slides.hangToggle == true){
             lift();
-        } else {
-            if(intakeValue == 1){
-                intake_dropper.setPosition(0.87);
-            } else {
-                intake_dropper.setPosition(pos);
-
-            }
+            intakeHeight = 7;
         }
 
 
@@ -103,13 +84,6 @@ public class Intake {
         }
 
 
-<<<<<<< HEAD
-        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_right)){
-            intakeValue = 1;
-        }
-        if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
-            intakeValue = 0;
-=======
 
         intake_dropper.setPosition(pos);
 
@@ -118,7 +92,6 @@ public class Intake {
         }
         if(gamepad2Ex.isPress(GamepadEx.Control.dpad_left)){
             pos += .02;
->>>>>>> 5ff0dcc7faacc123531080944104cd678be9759e
         }
 
         if(intakeToggle){
