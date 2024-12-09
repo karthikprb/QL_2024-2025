@@ -64,5 +64,5 @@ class ServoTester{
 
     public static String servoName = "wrist";
 
-    public static String servoTwoName = "wrist";
+    public static String servoTwoName = "wrist1";
 }

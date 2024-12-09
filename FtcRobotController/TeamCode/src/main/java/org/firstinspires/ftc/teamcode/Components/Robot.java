@@ -9,8 +9,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Odometry.S4T_Encoder;
 import org.firstinspires.ftc.teamcode.Odometry.S4T_Localizer;
-import org.firstinspires.ftc.teamcode.Vision.pixelsBlueClose;
-import org.firstinspires.ftc.teamcode.Vision.pixelsBlueFar;
 import org.firstinspires.ftc.teamcode.Vision.pixelsRedClose;
 import org.firstinspires.ftc.teamcode.Vision.pixelsRedFar;
 import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
@@ -31,9 +29,9 @@ public class   Robot {
 
     public Intake intake;
 
-    public Airplane plane;
 
-    public V4B_Arm v4b;
+
+    public Arm arm;
 
     public Slides slides;
 
@@ -69,18 +67,18 @@ public class   Robot {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        encoderLY = new S4T_Encoder(map, "bleft");
-        encoderLX = new S4T_Encoder(map, "fleft");
-        encoderRY = new S4T_Encoder(map, "bright");
-        encoderRX = new S4T_Encoder(map, "fright");
+     //   encoderLY = new S4T_Encoder(map, "bleft");
+       // encoderLX = new S4T_Encoder(map, "fleft");
+       // encoderRY = new S4T_Encoder(map, "bright");
+       // encoderRX = new S4T_Encoder(map, "fright");
 
         localizer = new S4T_Localizer(telemetry);
 
-        slides = new Slides(map,telemetry);
-        intake = new Intake(map,telemetry);
-        drive = new Mecanum_Drive(map, telemetry);
-        v4b = new V4B_Arm(map,telemetry);
-        plane = new Airplane(map, telemetry);
+     //   slides = new Slides(map,telemetry);
+       // intake = new Intake(map,telemetry);
+       // drive = new Mecanum_Drive(map, telemetry);
+        arm = new Arm(map);
+
 
         telemetry.update();
     }
@@ -88,53 +86,24 @@ public class   Robot {
     public void operate(GamepadEx gamepad1ex, GamepadEx gamepad2ex) {
         telemetry.addLine("MAKE SURE TO HIT RIGHT TRIGGER");
 
+     //   drive.write();
+
+        arm.operate(gamepad1ex);
+        arm.write();
+        //   intake.intake(gamepad1ex,gamepad2ex,telemetry);
+        //   intake.write();
 
 
-
-        if(gamepad2ex.isPress(GamepadEx.Control.start)){
-            driveToggle = !driveToggle;
-        }
-
-        if(driveToggle){
-            drive.drive(gamepad1ex.gamepad, 1.0, 0.6);
-        } else {
-            if(V4B_Arm.grabberToggle == 2){
-                drive.driveCentric(gamepad1ex.gamepad, 1, 0.5, getPos().getHeading());
-            } else {
-                drive.driveCentric(gamepad1ex.gamepad, 1, 0.7, getPos().getHeading());
-            }
-        }
-
-
-        drive.write();
-
-
-        intake.intake(gamepad1ex,gamepad2ex,telemetry);
-        intake.write();
-
-
-        slides.operate(gamepad1ex,gamepad2ex);
-        slides.write();
-
-
-        v4b.operate(gamepad1ex,gamepad2ex,telemetry);
-        v4b.write();
-
-        plane.operate(gamepad2ex,telemetry);
-        plane.write();
+    //    slides.operate(gamepad1ex,gamepad2ex);
+      //  slides.write();
 
         gamepad1ex.loop();
         gamepad2ex.loop();
 
-        telemetry.addData("Heading",Math.toDegrees(getPos().getHeading()));
-        telemetry.addData("Field Centric:", !robotCentric);
-
 
         if(gamepad1ex.isPress(GamepadEx.Control.start)){
             telemetry.addLine("Resetting...");
-            resetOdo();
         }else{
-            updatePos();
             update();
         }
 
@@ -185,7 +154,7 @@ public class   Robot {
         });
     }
 
-    public void blueCloseInitializeWebcam(){
+ /*  public void blueCloseInitializeWebcam(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
@@ -251,13 +220,13 @@ public class   Robot {
     public void stopWebcam(){
         webcam.stopStreaming();
     }
-
+*/
     public void updatePos(){
         encoderLX.update();
         encoderLY.update();
         encoderRX.update();
         encoderRY.update();
-        localizer.update(getRawLeft_X_Dist(),getRawLeft_Y_Dist(), getRawRight_X_Dist(), getRawRight_Y_Dist());
+        localizer.update(encoderLX.distance, encoderLY.distance, encoderRY.distance,encoderRX.distance);
     }
 
     public double getRawRight_X_Dist(){
@@ -298,10 +267,6 @@ public class   Robot {
         localizer.setHeading(startPos.getHeading());
     }
 
-    public Pose2d getPos(){
-        return new Pose2d((localizer.getPose().getX() + startPos.getX() - OFFSET.getX()), (localizer.getPose().getY() + startPos.getY() - OFFSET.getY()), localizer.getPose().getHeading());
-    }
-
     public Pose2d getStartPos(){
         return startPos;
     }
@@ -314,9 +279,6 @@ public class   Robot {
         updateGoTo(pose, speedLimits);
     }
 
-    public void GoTo(double x, double y, double heading, double maxspeed_x, double maxspeed_y, double maxspeed_z){
-        updateGoTo(new Pose2d(x, y, heading), new Pose2d(maxspeed_x, maxspeed_y, maxspeed_z));
-    }
 
     public void GoToAlign(double x, double y, double heading, double maxspeed_x, double maxspeed_y, double maxspeed_z){
         updateGoTo(new Pose2d(x, y, heading), new Pose2d(maxspeed_x, maxspeed_y, maxspeed_z));
@@ -325,8 +287,12 @@ public class   Robot {
     public void setAngle(double heading){
         localizer.setHeading(heading);
     }
-
-
+public Pose2d getPos(){
+     return new Pose2d((localizer.getPose().getX() + startPos.getX() - OFFSET.getX()), (localizer.getPose().getY() + startPos.getY() - OFFSET.getY()), localizer.getPose().getHeading());
+ }
+    public void GoTo(double x, double y, double heading, double maxspeed_x, double maxspeed_y, double maxspeed_z){
+        updateGoTo(new Pose2d(x, y, heading), new Pose2d(maxspeed_x, maxspeed_y, maxspeed_z));
+    }
 
     private void updateGoTo(Pose2d pose, Pose2d speedLimits){
         drive.goToPoint(pose, getPos(), speedLimits.getX(), speedLimits.getY(), speedLimits.getHeading());
@@ -342,7 +308,7 @@ public class   Robot {
             module.clearBulkCache();
         }
 
-        updatePos();
+
     }
 
 
