@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Math.Vector2;
 import org.firstinspires.ftc.teamcode.Wrapper.Caching_Motor;
+import org.firstinspires.ftc.teamcode.Wrapper.GamepadEx;
 
 import java.util.Arrays;
 
@@ -142,7 +143,7 @@ public class Mecanum_Drive{
         setPower(vec.x, vec.y, rot);
     }
 
-    public void setPowerCentic(double x, double y, double rot, double heading){
+    public void setPowerCentric(double x, double y, double rot, double heading){
         setPower(new Vector2(x, y).rotated(((2 * Math.PI) - heading) + Math.PI), rot);
 
     }
@@ -151,17 +152,17 @@ public class Mecanum_Drive{
         setPower(Range.clip(gamepad.left_stick_x * scale, -maxMove, maxMove), Range.clip(gamepad.left_stick_y * scale, -maxMove, maxMove), Range.clip(-gamepad.right_stick_x * turnScale, -maxTurn, maxTurn));
     }
 
-    public void drive(Gamepad gamepad, double maxMove, double maxTurn){
-        setPower(Range.clip(gamepad.left_stick_x, -maxMove, maxMove), Range.clip(gamepad.left_stick_y, -maxMove, maxMove), Range.clip(gamepad.right_stick_x, -maxTurn, maxTurn));
+    public void drive(GamepadEx gamepadEx1, double maxMove, double maxTurn){
+        setPower(Range.clip(gamepadEx1.gamepad.left_stick_x, -maxMove, maxMove), Range.clip(gamepadEx1.gamepad.left_stick_y, -maxMove, maxMove), Range.clip(gamepadEx1.gamepad.right_stick_x, -maxTurn, maxTurn));
     }
 
     public void driveCentric(Gamepad gamepad, double maxMove, double maxTurn, double heading){
-            setPowerCentic(-gamepad.left_stick_x * maxMove, -gamepad.left_stick_y * maxMove, gamepad.right_stick_x * maxTurn, heading);
+            setPowerCentric(-gamepad.left_stick_x * maxMove, -gamepad.left_stick_y * maxMove, gamepad.right_stick_x * maxTurn, heading);
 
     }
 
     public void driveCentric(Gamepad gamepad, double turnScale, double maxMove, double maxTurn, double heading){
-        setPowerCentic(Range.clip(gamepad.left_stick_x, -maxMove, maxMove), Range.clip(gamepad.left_stick_y, -maxMove, maxMove), Range.clip(-gamepad.right_stick_x * turnScale, -maxTurn, maxTurn), heading);
+        setPowerCentric(Range.clip(gamepad.left_stick_x, -maxMove, maxMove), Range.clip(gamepad.left_stick_y, -maxMove, maxMove), Range.clip(-gamepad.right_stick_x * turnScale, -maxTurn, maxTurn), heading);
     }
 
     public void goToPoint(Pose2d targetPos, Pose2d currentPos, double xspeed, double yspeed, double zspeed){
@@ -192,9 +193,9 @@ public class Mecanum_Drive{
         PID_Z.setTargetPosition(target_heading);
 
         if(!blue) {
-            setPowerCentic(-PID_X.update(currentPos.getX()), PID_Y.update(currentPos.getY()), PID_Z.update(heading), currentPos.getHeading());
+            setPowerCentric(-PID_X.update(currentPos.getX()), PID_Y.update(currentPos.getY()), PID_Z.update(heading), currentPos.getHeading());
         }else {
-            setPowerCentic(PID_X.update(currentPos.getX()), PID_Y.update(currentPos.getY()), PID_Z.update(heading), currentPos.getHeading());
+            setPowerCentric(PID_X.update(currentPos.getX()), PID_Y.update(currentPos.getY()), PID_Z.update(heading), currentPos.getHeading());
         }
     }
 }
